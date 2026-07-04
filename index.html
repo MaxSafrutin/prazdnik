@@ -1,117 +1,270 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Калькулятор услуг — MAX SAFRUTIN</title>
-  <style>
-    :root{
-      --bg:#0B0B0E;--card:#1C1C1E;--card2:#242428;--input:#111114;--text:#F7F7F8;--muted:#A7A7AD;--line:rgba(255,255,255,.10);--gold:#FFD700;--gold2:#F5A623;--ok:#7AE582;--danger:#FF6B6B;--shadow:0 18px 50px rgba(0,0,0,.35);--focus:rgba(255,215,0,.20);--radius:16px;
-    }
-    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100vh;color:var(--text);background:radial-gradient(circle at 18% 0%,rgba(255,215,0,.16),transparent 30%),radial-gradient(circle at 88% 18%,rgba(245,166,35,.12),transparent 34%),var(--bg);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",system-ui,sans-serif} button,input,select{font:inherit}.app{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:24px 0 34px}.topbar{margin-bottom:20px}.eyebrow{color:var(--gold);text-transform:uppercase;letter-spacing:.16em;font-size:12px;font-weight:900}h1{margin:6px 0 0;font-size:clamp(28px,4vw,52px);line-height:1.02;letter-spacing:-.04em}.subtitle{margin:10px 0 0;color:var(--muted);max-width:760px;font-size:15px;line-height:1.5}.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(330px,.7fr);gap:18px;align-items:start}.panel,.result-card{background:linear-gradient(180deg,rgba(255,255,255,.035),transparent),var(--card);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow)}.panel{padding:18px}.result-card{position:sticky;top:16px;padding:18px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.full{grid-column:1/-1}.field{display:flex;flex-direction:column;gap:8px}.section-gap{margin-top:16px}.label,label{color:var(--text);font-weight:780;font-size:14px}.hint{color:var(--muted);font-size:12px;line-height:1.35}.control{position:relative}.control input,.control select,input[type="number"]{width:100%;min-height:46px;color:var(--text);background:var(--input);border:1px solid var(--line);border-radius:14px;padding:10px 46px 10px 12px;outline:none;transition:border-color .2s ease,box-shadow .2s ease}.control input:focus,.control select:focus,input[type="number"]:focus{border-color:var(--gold2);box-shadow:0 0 0 5px var(--focus)}.pick-btn{position:absolute;right:7px;top:7px;width:32px;height:32px;display:grid;place-items:center;color:#141414;background:linear-gradient(135deg,var(--gold),var(--gold2));border:0;border-radius:11px;cursor:pointer;font-weight:950}.row{display:flex;gap:10px;align-items:center}.mini-check{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}.mini-check input{accent-color:var(--gold2)}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.option-card{position:relative;display:grid;gap:6px;padding:13px;background:var(--card2);border:1px solid var(--line);border-radius:var(--radius);cursor:pointer;transition:transform .18s ease,border-color .18s ease,background .18s ease}.option-card:hover{transform:translateY(-1px);border-color:rgba(255,215,0,.35)}.option-card input{position:absolute;opacity:0;pointer-events:none}.option-card.active{border-color:var(--gold);background:linear-gradient(135deg,rgba(255,215,0,.13),transparent),var(--card2)}.option-card.disabled{opacity:.38;display:none}.option-title{font-weight:900}.option-price{color:var(--gold);font-weight:950}.option-note{color:var(--muted);font-size:12px;line-height:1.35}.switch-row{display:flex;justify-content:space-between;gap:14px;align-items:center;padding:13px;background:var(--card2);border:1px solid var(--line);border-radius:var(--radius)}.switch-row.hidden,.hidden{display:none!important}.switch{position:relative;width:54px;height:32px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;border-radius:999px;cursor:pointer;background:rgba(255,255,255,.15);border:1px solid var(--line);transition:.2s ease}.slider:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.2s ease}.switch input:checked+.slider{background:linear-gradient(135deg,var(--gold),var(--gold2))}.switch input:checked+.slider:before{transform:translateX(22px);background:#151515}.conditional{display:none;animation:fadeIn .18s ease both;margin-top:12px}.conditional.show{display:block}.range-line{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}.range-label{font-weight:900;color:var(--gold)}input[type="range"]{width:100%;accent-color:var(--gold2);outline:none}input[type="range"]:focus{outline:none;box-shadow:none}.btn{width:100%;min-height:46px;border:0;border-radius:14px;color:#141414;font-weight:950;background:linear-gradient(135deg,var(--gold),var(--gold2));cursor:pointer;transition:transform .18s ease,filter .18s ease;text-align:center;text-decoration:none;display:grid;place-items:center}.btn:hover{transform:translateY(-1px);filter:brightness(1.03)}.btn.secondary{background:var(--card2);color:var(--text);border:1px solid rgba(255,215,0,.28)}.result-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}.result-label{color:var(--muted);font-size:13px;font-weight:800}.price{margin-top:5px;font-size:clamp(34px,5vw,54px);line-height:1;letter-spacing:-.05em;color:var(--gold);font-weight:980;transition:transform .2s ease,opacity .2s ease}.price.bump{transform:scale(1.025);opacity:.82}.pill{display:inline-flex;align-items:center;gap:6px;color:var(--text);background:var(--card2);border:1px solid var(--line);border-radius:999px;padding:8px 10px;font-size:12px;font-weight:850;white-space:nowrap}.vat-note{display:none;margin-top:8px;color:var(--muted);font-size:13px}.vat-note.show{display:block}.vat-note strong{color:var(--gold)}.breakdown{display:grid;gap:8px;margin-top:12px}.line-item{display:flex;justify-content:space-between;gap:12px;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}.line-item strong{color:var(--text)}.line-item.discount strong{color:var(--ok)}.line-item:last-child{border-bottom:0}.result-actions{display:grid;gap:10px;margin-top:14px}.modal{position:fixed;inset:0;display:none;place-items:center;background:rgba(0,0,0,.62);z-index:50;padding:18px}.modal.show{display:grid}.modal-card{width:min(560px,100%);max-height:min(760px,90vh);overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);animation:fadeIn .18s ease both}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.modal-title{font-size:22px;font-weight:950}.x{width:38px;height:38px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--text);cursor:pointer}.check-list{display:grid;gap:10px}.check-item{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}.check-item input{margin-top:4px;accent-color:var(--gold2)}.mobile-sticky{display:none}.mobile-full{display:none}.muted-separator{height:1px;background:var(--line);margin:16px 0}.details-note{margin-top:10px;color:var(--muted);font-size:12px;line-height:1.4}.debug{display:none;white-space:pre-wrap;font-family:ui-monospace,monospace;color:var(--muted);font-size:11px;margin-top:14px;padding:12px;background:#0e0e11;border:1px solid var(--line);border-radius:14px}@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}@media(max-width:860px){.layout{grid-template-columns:1fr}.desktop-result{display:none}.mobile-full{display:block;position:static;margin-top:10px}.mobile-sticky{display:block;position:sticky;bottom:0;z-index:25;width:100%;margin:14px 0 0;padding:12px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.045),transparent),var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}.mobile-sticky.is-hidden{display:none}.mobile-sticky .price{font-size:30px}.mobile-sticky .pill,.mobile-sticky .vat-note{display:none}.app{padding-bottom:0}.layout{gap:10px}}@media(max-width:560px){.app{width:min(100% - 20px,1180px);padding-top:14px}.grid,.cards{grid-template-columns:1fr}.panel,.result-card{padding:14px}.pill{display:none}.price{font-size:34px}.line-item{padding:8px 0;font-size:13px}}
-  </style>
+  <meta name="description" content="Калькулятор DJ, ведущего, оборудования, реквизита, проезда, скидок и НДС.">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-<main class="app">
-  <div class="topbar">
-    <div class="eyebrow">MAX SAFRUTIN</div>
-    <h1>Калькулятор услуг</h1>
-    <p class="subtitle">Соберите свой праздник (DJ • Ведущий • Оборудование • Артисты • Разное)</p>
-  </div>
-  <section class="layout">
-    <form class="panel" id="calculator" autocomplete="off">
-      <div class="grid">
-        <div class="field"><label for="eventType">Тип мероприятия</label><div class="control"><input id="eventType" list="eventTypeList"><button class="pick-btn" type="button" data-open="eventType">⌄</button></div><datalist id="eventTypeList"></datalist></div>
-        <div class="field"><label for="hours">Количество часов</label><div class="control"><input id="hours" list="hoursList" inputmode="numeric"><button class="pick-btn" type="button" data-open="hours">⌄</button></div><datalist id="hoursList"></datalist><span class="hint" id="hoursHint">Для некоторых мероприятий минимальный заказ — 3 часа.</span></div>
-        <div class="field"><label>Дата мероприятия</label><label class="mini-check"><input id="exactDate" type="checkbox"> Указать точную дату</label><div class="control conditional" id="dateWrap"><input id="eventDate" type="date"><button class="pick-btn" id="datePickerButton" type="button" aria-label="Открыть календарь">📅</button></div><span class="hint">Выберите вашу или примерную дату</span></div>
-        <div class="field"><label>Время начала</label><label class="mini-check"><input id="exactTime" type="checkbox"> Указать точное время начала</label><div class="control conditional" id="timeWrap"><input id="startTime" list="timeList"><button class="pick-btn" type="button" data-open="startTime">⌄</button></div><datalist id="timeList"></datalist><span class="hint">Для пятницы и субботы после 16:00 минимальный заказ — 3 часа.</span></div>
-        <div class="field full"><label for="placeType">Место проведения</label><div class="control"><input id="placeType" list="placeList"><button class="pick-btn" type="button" data-open="placeType">⌄</button></div><datalist id="placeList"></datalist></div>
-        <div class="field full"><label for="guests">Количество гостей: <strong id="guestValue">2</strong></label><input id="guests" type="range" min="2" max="200" step="1" value="2"><div class="range-line"><span>2</span><span>15</span><span>30</span><span>50</span><span>80</span><span>130</span><span>180</span><span>200</span></div></div>
-      </div>
-      <div class="muted-separator"></div>
-      <div class="field full"><label>Как собрать расчёт</label><div class="cards" id="buildModeCards"></div></div>
-      <div class="conditional" id="packageBox"><div class="field"><label for="presetPackage">Готовые пакеты под выбранное мероприятие</label><div class="control"><input id="presetPackage" list="presetList"><button class="pick-btn" type="button" data-open="presetPackage">⌄</button></div><datalist id="presetList"></datalist><button class="btn secondary section-gap" id="applyPreset" type="button">Показать состав и применить пакет</button></div></div>
-      <div id="manualBox" class="section-gap"><div class="field full"><label>Что нужно на мероприятие</label><div class="cards" id="serviceCards"></div></div>
-        <div class="conditional" id="djDetails"><div class="grid section-gap"><div class="field"><label for="djRole">Роль диджея</label><div class="control"><input id="djRole" list="djRoleList"><button class="pick-btn" type="button" data-open="djRole">⌄</button></div><datalist id="djRoleList"></datalist></div><div class="field"><label for="equipmentMode">Оборудование</label><div class="control"><input id="equipmentMode" list="equipmentModeList"><button class="pick-btn" type="button" data-open="equipmentMode">⌄</button></div><datalist id="equipmentModeList"></datalist></div><div class="field full" id="hostPresenceWrap"><label for="hostPresence">Ведущий на площадке</label><div class="control"><input id="hostPresence" list="hostPresenceList"><button class="pick-btn" type="button" data-open="hostPresence">⌄</button></div><datalist id="hostPresenceList"></datalist></div></div>
-          <div class="conditional" id="equipmentWrap"><div class="field section-gap"><label>Комплект оборудования</label><div class="cards" id="equipmentCards"></div></div><div class="small-row switch-row" id="internetRow"><div><div class="label">Есть интернет на площадке</div></div><label class="switch"><input id="hasInternet" type="checkbox" checked><span class="slider"></span></label></div><div class="small-row switch-row" id="socketRow"><div><div class="label">Есть розетка на площадке</div><div class="hint">Розетка соответствует мощности заказываемого оборудования или нужен генератор</div></div><label class="switch"><input id="hasSocket" type="checkbox" checked><span class="slider"></span></label></div><div class="small-row switch-row" id="logisticsRow"><div><div class="label">Доставка, разгрузка, монтаж и демонтаж</div><div class="hint">Добавляется для комплектов мощнее 1 кВт.</div></div><label class="switch"><input id="logistics" type="checkbox"><span class="slider"></span></label></div></div>
+  <main class="app">
+    <header class="topbar">
+      <section class="brand" aria-labelledby="pageTitle">
+        <div class="eyebrow" data-content="brand">MAX SAFRUTIN</div>
+        <h1 id="pageTitle" data-content="title">Калькулятор услуг</h1>
+        <p class="subtitle">
+          <span>DJ • Ведущий • Оборудование • Артисты</span>
+          <span>Создайте себе праздник!</span>
+        </p>
+      </section>
+    </header>
+
+    <section class="layout">
+      <form class="panel" id="calculator" autocomplete="off">
+        <section class="section-block" id="basicSection">
+          <div class="section-title">
+            <span class="badge">1</span>
+            <h2>Основные параметры</h2>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <div class="control select-control" data-symbol="◆">
+                <select id="eventType" aria-label="Выберите тип мероприятия"></select>
+                <button class="pick-btn" type="button" data-open-control="eventType" aria-label="Открыть список типов мероприятия">◆</button>
+              </div>
+              <span class="hint">Для некоторых мероприятий минимальный заказ — 3 часа.</span>
+            </div>
+
+            <div class="field">
+              <div class="control select-control" data-symbol="◷">
+                <select id="hours" aria-label="Выберите кол-во часов"></select>
+                <button class="pick-btn" type="button" data-open-control="hours" aria-label="Открыть список часов">◷</button>
+              </div>
+              <span class="hint" id="hoursHint">Для пятницы и субботы после 16:00 минимальный заказ — 3 часа.</span>
+            </div>
+
+            <div class="field full after-basic">
+              <label for="guests">Количество гостей: <strong id="guestValue">2</strong></label>
+              <input id="guests" class="range" type="range" min="2" max="200" step="1" value="2">
+              <div class="range-line">
+                <span>2</span><span>50</span><span>80</span><span>110</span><span>140</span><span>170</span><span>200</span>
+              </div>
+            </div>
+
+            <div class="field after-basic">
+              <label class="check-label">
+                <input id="useExactDate" type="checkbox">
+                <span>Указать точную дату</span>
+              </label>
+              <div class="conditional" id="dateWrap">
+                <label for="eventDate" class="sub-label">Дата мероприятия</label>
+                <div class="control date-control">
+                  <input id="eventDate" type="date">
+                  <button class="pick-btn" id="datePickerButton" type="button" aria-label="Открыть календарь">📅</button>
+                </div>
+              </div>
+              <span class="hint">Выберите вашу или примерную дату.</span>
+            </div>
+
+            <div class="field after-basic">
+              <label class="check-label">
+                <input id="useExactTime" type="checkbox">
+                <span>Указать точное время начала</span>
+              </label>
+              <div class="conditional" id="timeWrap">
+                <label for="startTime" class="sub-label">Время начала</label>
+                <div class="control time-control">
+                  <input id="startTime" type="time" step="1800" value="16:00" list="timeOptions">
+                  <datalist id="timeOptions"></datalist>
+                  <button class="pick-btn" id="timePickerButton" type="button" aria-label="Открыть выбор времени">🕓</button>
+                </div>
+              </div>
+              <span class="hint">Для пятницы и субботы после 16:00 минимальный заказ — 3 часа.</span>
+            </div>
+
+          </div>
+        </section>
+
+        <section class="section-block gated-block" id="compositionSection">
+          <div class="section-title">
+            <span class="badge">2</span>
+            <h2>Состав</h2>
+          </div>
+          <div class="composition-buttons" aria-label="Основной выбор состава">
+            <button class="choice-pill" type="button" data-service-type="dj">Диджей</button>
+            <button class="choice-pill" type="button" data-service-type="host">Ведущий</button>
+            <button class="choice-pill" type="button" data-service-type="both">Диджей+Ведущий</button>
+          </div>
+          <div class="field composition-detail" id="serviceDetailWrap">
+            <div class="label">Уточните состав</div>
+            <div class="composition-buttons detail-buttons" id="serviceDetailButtons" aria-label="Уточните состав"></div>
+            <select class="legacy-hidden" id="serviceDetail" aria-label="Уточнение состава"></select>
+          </div>
+        </section>
+
+        <section class="section-block service-block" id="djSection">
+          <div class="section-title">
+            <span class="badge">3</span>
+            <h2>DJ</h2>
+          </div>
+          <div class="grid">
+            <div class="field legacy-hidden">
+              <label for="djMode">Диджей</label>
+              <div class="control select-control" data-symbol="♪">
+                <select id="djMode"></select>
+                <button class="pick-btn" type="button" data-open-control="djMode" aria-label="Открыть список DJ">♪</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="djRole">Роль DJ</label>
+              <div class="control select-control" data-symbol="≋">
+                <select id="djRole"></select>
+                <button class="pick-btn" type="button" data-open-control="djRole" aria-label="Открыть роли DJ">≋</button>
+              </div>
+            </div>
+            <div class="field">
+              <label for="djEquipmentMode">Оборудование DJ</label>
+              <div class="control select-control" data-symbol="▰">
+                <select id="djEquipmentMode"></select>
+                <button class="pick-btn" type="button" data-open-control="djEquipmentMode" aria-label="Открыть оборудование DJ">▰</button>
+              </div>
+              <span class="hint">Если без моего оборудования, ставка DJ умножается на коэффициент.</span>
+            </div>
+            <div class="field" id="djKitWrap">
+              <label for="djKit">Комплект оборудования</label>
+              <div class="control select-control" data-symbol="▦">
+                <select id="djKit"></select>
+                <button class="pick-btn" type="button" data-open-control="djKit" aria-label="Открыть комплект оборудования">▦</button>
+              </div>
+            </div>
+            <div class="field full">
+              <label class="check-label">
+                <input id="noInternet" type="checkbox">
+                <span>Нет интернета</span>
+              </label>
+              <label class="check-label">
+                <input id="needGenerator" type="checkbox">
+                <span>Нет подходящей розетки, нужен генератор</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block service-block" id="hostSection">
+          <div class="section-title">
+            <span class="badge">4</span>
+            <h2>Ведущий и реквизит</h2>
+          </div>
+          <div class="grid">
+            <div class="field legacy-hidden">
+              <label for="hostMode">Ведущий</label>
+              <div class="control select-control" data-symbol="●">
+                <select id="hostMode"></select>
+                <button class="pick-btn" type="button" data-open-control="hostMode" aria-label="Открыть список ведущего">●</button>
+              </div>
+            </div>
+            <div class="field" id="hostRoleWrap">
+              <label for="hostRole">Роль ведущего</label>
+              <div class="control select-control" data-symbol="◌">
+                <select id="hostRole"></select>
+                <button class="pick-btn" type="button" data-open-control="hostRole" aria-label="Открыть роли ведущего">◌</button>
+              </div>
+            </div>
+            <div class="field full" id="hostPropsWrap">
+              <label for="hostProps">Оборудование и реквизит ведущего</label>
+              <div class="control select-control" data-symbol="◇">
+                <select id="hostProps"></select>
+                <button class="pick-btn" type="button" data-open-control="hostProps" aria-label="Открыть реквизит">◇</button>
+              </div>
+            </div>
+            <div class="field full">
+              <label class="check-label">
+                <input id="noParking" type="checkbox">
+                <span>Нет парковки</span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-block service-block" id="techSection">
+          <div class="section-title">
+            <span class="badge">5</span>
+            <h2>Площадка, проезд, скидки</h2>
+          </div>
+          <div class="grid">
+            <div class="field">
+              <label for="placeType">Место проведения</label>
+              <div class="control select-control" data-symbol="⌖">
+                <select id="placeType"></select>
+                <button class="pick-btn" type="button" data-open-control="placeType" aria-label="Открыть место проведения">⌖</button>
+              </div>
+            </div>
+            <div class="field">
+              <label class="check-label">
+                <input id="outOfTown" type="checkbox">
+                <span>Выезд за город</span>
+              </label>
+              <div class="conditional" id="distanceWrap">
+                <label for="distanceKm" class="sub-label">Километраж: <strong id="distanceValue">10 км</strong></label>
+                <input id="distanceKm" class="range" type="range" min="10" max="300" step="5" value="10">
+                <div class="range-line">
+                  <span>10</span><span>50</span><span>150</span><span>300</span>
+                </div>
+              </div>
+            </div>
+            <div class="field full">
+              <label class="check-label">
+                <input id="cashless" type="checkbox">
+                <span>Расчёт для юр. лица с полным НДС 22%</span>
+              </label>
+            </div>
+          </div>
+        </section>
+      </form>
+
+      <div class="result-dock-sentinel" id="resultDockSentinel" aria-hidden="true"></div>
+      <aside class="result-card desktop-result" id="resultCard" aria-live="polite">
+        <div class="result-head">
+          <div>
+            <div class="result-label">Итоговая стоимость</div>
+            <div class="price" id="totalPrice">0 ₽</div>
+            <div class="vat-note" id="vatNote">НДС не применяется</div>
+          </div>
+          <div class="pill" id="scenarioPill">2 гостя • 3 часа</div>
         </div>
-        <div class="conditional" id="hostDetails"><div class="grid section-gap"><div class="field"><label for="hostSource">Ведущий</label><div class="control"><input id="hostSource" list="hostSourceList"><button class="pick-btn" type="button" data-open="hostSource">⌄</button></div><datalist id="hostSourceList"></datalist></div><div class="field" id="hostRoleWrap"><label for="hostRole">Роль ведущего</label><div class="control"><input id="hostRole" list="hostRoleList"><button class="pick-btn" type="button" data-open="hostRole">⌄</button></div><datalist id="hostRoleList"></datalist></div><div class="field full" id="hostKitWrap"><label for="hostKit">Реквизит / подготовка ведущего</label><div class="control"><input id="hostKit" list="hostKitList"><button class="pick-btn" type="button" data-open="hostKit">⌄</button></div><datalist id="hostKitList"></datalist></div></div></div>
+        <div class="breakdown" id="breakdown"></div>
+        <div class="result-actions">
+          <button class="btn muted-btn" id="discountButton" type="button">Хочу скидку</button>
+          <a class="btn primary-btn" href="tel:+79272651777">Забронировать дату</a>
+        </div>
+      </aside>
+    </section>
+
+  </main>
+
+  <div class="modal" id="discountModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="discountTitle">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">Скидка</div>
+          <h2 id="discountTitle">Выберите вариант</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="Закрыть">×</button>
       </div>
-      <div class="muted-separator"></div>
-      <div class="switch-row"><div><div class="label">Выезд за город</div><div class="hint">Считается по километражу.</div></div><label class="switch"><input id="outOfTown" type="checkbox"><span class="slider"></span></label></div>
-      <div class="conditional" id="distanceWrap"><div class="field"><label for="distanceKm">Километраж: <strong id="distanceValue">10 км</strong></label><input id="distanceKm" type="range" min="10" max="300" step="10" value="10"><div class="range-line"><span>10</span><span>50</span><span>150</span><span>300</span></div></div></div>
-      <div class="small-row switch-row"><div><div class="label">Расчёт для юр. лица с полным НДС 22%</div></div><label class="switch"><input id="cashless" type="checkbox"><span class="slider"></span></label></div>
-    </form>
-    <aside class="result-card desktop-result" id="resultCard"></aside>
-  </section>
-  <aside class="result-card mobile-full" id="mobileFullResult"></aside>
-  <aside class="mobile-sticky" id="mobileSticky"><div class="result-label">Итоговая стоимость</div><div class="price" id="mobileStickyPrice">0 ₽</div></aside>
-</main>
-<div class="modal" id="discountModal" aria-hidden="true"><div class="modal-card"><div class="modal-head"><div class="modal-title">Вариант скидки</div><button class="x" id="closeDiscount" type="button">×</button></div><div class="check-list" id="discountList"></div><button class="btn section-gap" id="applyDiscount" type="button">Применить скидку</button></div></div>
-<script>
-/* ===================== CONFIG: править тарифы и коэффициенты здесь ===================== */
-const CONFIG={
-  currency:'₽', phone:'tel:+79272651777', baseDate:'2026-07-03', djDailyGrowth:0.5, hostDailyGrowth:1.5, minimumDisplayedStart:1500,
-  discountReservePercent:10, cashlessMultiplier:1.4, vatRate:22, weekendEveningHour:16, fridaySaturdayEveningMinHours:3, specialEventMinHours:3, defaultTime:'16:00', maxHoursDefault:8, maxHoursPro:12, maxHoursMobile:3,
-  djGuestRates:[{to:50,rate:1500},{to:80,rate:1700},{to:110,rate:2000},{to:140,rate:2300},{to:170,rate:2600},{to:200,rate:3000}],
-  hostGuestRates:[{to:50,rate:5000},{to:80,rate:6500},{to:110,rate:8000},{to:140,rate:10000},{to:170,rate:12500},{to:200,rate:15000}],
-  duration:{1:1.6,2:1.4,3:1.0,4:.99,5:.95,6:.99,7:1.0,8:1.1,9:1.2,10:1.3,11:1.4,12:1.6},
-  eventTypes:{wedding:{title:'Свадьба',multiplier:1,minHours:3},anniversary:{title:'Юбилей',multiplier:1,minHours:1},birthday:{title:'День рождения',multiplier:1,minHours:1},kids:{title:'Детский праздник',multiplier:1.3,minHours:1},office:{title:'Корпоратив (офисный)',multiplier:1.3,minHours:3},newyear:{title:'Новогодний корпоратив',multiplier:1.5,minHours:3},presentation:{title:'Открытие / Презентация',multiplier:1.3,minHours:1},graduation:{title:'Выпускной',multiplier:1.2,minHours:3},festival:{title:'День города / Фестиваль',multiplier:1.5,minHours:3},club:{title:'Клубная вечеринка',multiplier:1.4,minHours:1},picnic:{title:'Выездной пикник / Тимбилдинг',multiplier:1,minHours:1},other:{title:'Свой вариант (другое)',multiplier:1,minHours:1}},
-  places:{restaurant:{title:'Ресторан / Лофт (есть парковка)',multiplier:1,parking:true},country:{title:'Загородный дом / База отдыха',multiplier:1.3,parking:false},tent:{title:'Беседка / Шатёр',multiplier:1.5,parking:false},street:{title:'Улица / Парк',multiplier:1.4,parking:false}},
-  dayTime:{weekday:1,fridaySaturday:1.10,fridaySaturdayEvening:1.11,sunday:1.10,preliminary:1,unknownTime:1},
-  urgency:[{to:3,multiplier:1.2,title:'0–3 дня'},{to:7,multiplier:1.1,title:'4–7 дней'},{to:14,multiplier:1,title:'8–14 дней'},{to:30,multiplier:.95,title:'15–30 дней'},{to:9999,multiplier:.9,title:'31+ дней'}],
-  djRoles:{lounge:{title:'Лаунж',multiplier:.8},base:{title:'Базовый универсал',multiplier:1},universal:{title:'Универсал с конкурсами',multiplier:1.2},clubmc:{title:'Клубный MC',multiplier:1.5},hostAwards:{title:'Хост для премий',multiplier:3}},
-  hostRoles:{toastmaster:{title:'Тамада',multiplier:.9},host:{title:'Ведущий',multiplier:1},animator:{title:'Аниматор / Игротехник',multiplier:1.11},conf:{title:'Хост / Конферансье',multiplier:1.5},mc:{title:'MC',multiplier:1.45}},
-  djEquipmentInfluence:{own:1,noEquipment:1.09}, djHostInfluence:{onlyDj:1.3,djAndHost:1.7,clientHost:1,providedHost:.98},
-  hostDjInfluence:{onlyHost:1.4,hostAndDj:1.7,clientDj:1,providedDj:.98},
-  equipment:{none:{title:'Без оборудования',price:0,maxGuests:200,power:0,maxHours:8,note:'Только ноутбук / подключение к площадке'},mobile:{title:'Мобильный JBL',price:2000,maxGuests:30,power:.3,maxHours:3,note:'JBL PartyBox, до 3 часов без розетки'},light:{title:'Лёгкий комплект',price:3000,maxGuests:30,power:1,maxHours:8,note:'1 активная колонка'},lightLux:{title:'Лёгкий комплект Люкс',price:9000,maxGuests:50,power:1,maxHours:8,note:'Лёгкий звук + расширенный свет'},standard:{title:'Стандарт 2 кВт',price:4000,maxGuests:80,power:2,maxHours:8,note:'2 колонки, свет, микрофоны'},standardLux:{title:'Стандарт 2 кВт Люкс',price:12000,maxGuests:120,power:2,maxHours:8,note:'Стандарт + расширенный свет'},pro:{title:'Профи 5 кВт',price:15000,maxGuests:180,power:5,maxHours:12,note:'Мощный звук, свет, стойки'},proLux:{title:'Профи Люкс',price:75000,maxGuests:200,power:5,maxHours:12,note:'Максимальный комплект'}},
-  extras:{offlineInternet:500,generator:5000,logistics:2000,noParking:1000},
-  hostKits:{none:{title:'Без оборудования и реквизита',price:0},timing:{title:'Разработка индивидуального тайминга',price:1500},specialists:{title:'Подбор доп. специалистов и артистов',price:1500},mobile:{title:'Мобильный реквизит',price:2000},light:{title:'Лёгкий реквизит + призы',price:5000},lightLux:{title:'Лёгкий реквизит + призы Люкс',price:15000},standard:{title:'Стандарт: реквизит + призы + экран',price:10000},standardLux:{title:'Стандарт Люкс',price:25000},pro:{title:'Профи: реквизит + экран + помощники',price:40000},proLux:{title:'Профи Люкс',price:120000}},
-  travel:{min:500,tiers:[{to:50,rate:35},{to:150,rate:30},{to:300,rate:25}]},
-  discounts:{review:{title:'Оставлю отзыв',percent:2,group:'stack'},partner:{title:'Партнёр / агентство',percent:10,group:'exclusive'},long:{title:'Долгосрочный договор',percent:15,group:'exclusive'},ref:{title:'Приведу друзей',percent:5,group:'stack'},today:{title:'Бронирую сегодня',percent:3,group:'stack'}},
-  presets:{wedding:[{title:'Свадьба: DJ + стандарт',service:'dj',equip:'standard',hours:6,djRole:'universal'},{title:'Свадьба: DJ + ведущий + стандарт Люкс',service:'dj+host',equip:'standardLux',hours:6,djRole:'universal',hostRole:'toastmaster'}],graduation:[{title:'Выпускной: DJ партнёрский',service:'dj',equip:'standard',hours:6,djRole:'universal',place:'tent'},{title:'Выпускной: DJ + ведущий',service:'dj+host',equip:'standardLux',hours:6,djRole:'universal',hostRole:'host'}],other:[{title:'Минимальный DJ',service:'dj',equip:'none',hours:1,djRole:'base'},{title:'Компактный праздник',service:'dj+host',equip:'light',hours:3,djRole:'base',hostRole:'host'}]}
-};
-/* ===================== DOM ===================== */
-const $=id=>document.getElementById(id), state={discountsApplied:false};
-const ids=['eventType','hours','exactDate','eventDate','exactTime','startTime','placeType','guests','presetPackage','djRole','equipmentMode','hostSource','hostRole','hostPresence','hostKit','hasInternet','hasSocket','logistics','outOfTown','distanceKm','cashless'];
-function money(n){return Math.round(n).toLocaleString('ru-RU')+' '+CONFIG.currency} function titleBy(obj,key){return obj[key]?.title||key} function keyByTitle(obj,title){return Object.keys(obj).find(k=>obj[k].title===title)||Object.keys(obj)[0]} function daysBetween(a,b){return Math.ceil((a-b)/(1000*60*60*24))} function clamp(v,min,max){return Math.max(min,Math.min(max,v))}
-function fillDatalist(id,items){$(id).innerHTML=items.map(x=>`<option value="${x}"></option>`).join('')} function setInput(id,val){$(id).value=val}
-function cardGroup(elId,name,items,value){$(elId).innerHTML=items.map(i=>`<label class="option-card ${i.disabled?'disabled':''} ${i.key===value?'active':''}"><input type="radio" name="${name}" value="${i.key}" ${i.key===value?'checked':''} ${i.disabled?'disabled':''}><span class="option-title">${i.title}</span>${i.price!==undefined?`<span class="option-price">${i.price?money(i.price):'0 ₽'}</span>`:''}<span class="option-note">${i.note||''}</span></label>`).join('');$(elId).querySelectorAll('input').forEach(i=>i.addEventListener('change',()=>{updateUI();calculate()}))}
-function selectedRadio(name){return document.querySelector(`input[name="${name}"]:checked`)?.value}
-function init(){fillDatalist('eventTypeList',Object.values(CONFIG.eventTypes).map(x=>x.title));fillDatalist('placeList',Object.values(CONFIG.places).map(x=>x.title));fillDatalist('timeList',Array.from({length:24},(_,i)=>String(i).padStart(2,'0')+':00'));fillDatalist('djRoleList',Object.values(CONFIG.djRoles).map(x=>x.title));fillDatalist('equipmentModeList',['С оборудованием','Без оборудования']);fillDatalist('hostSourceList',['Будет наш','Нужен ваш']);fillDatalist('hostPresenceList',['Нет ведущего','Есть ведущий клиента / партнёра','Нужен наш ведущий']);fillDatalist('hostRoleList',Object.values(CONFIG.hostRoles).map(x=>x.title));fillDatalist('hostKitList',Object.values(CONFIG.hostKits).map(x=>x.title));
-  setInput('eventType',CONFIG.eventTypes.other.title);setInput('placeType',CONFIG.places.restaurant.title);setInput('hours','1');setInput('startTime',CONFIG.defaultTime);setInput('djRole',CONFIG.djRoles.base.title);setInput('equipmentMode','Без оборудования');setInput('hostSource','Нужен ваш');setInput('hostPresence','Нет ведущего');setInput('hostRole',CONFIG.hostRoles.host.title);setInput('hostKit',CONFIG.hostKits.none.title);
-  const d=new Date();d.setDate(d.getDate()+3);$('eventDate').value=d.toISOString().slice(0,10);
-  cardGroup('buildModeCards','buildMode',[{key:'manual',title:'Собрать вручную',note:'Показать все параметры'},{key:'package',title:'Выбрать пакет',note:'Готовые решения под мероприятие'}],'manual');
-  cardGroup('serviceCards','service',[{key:'dj',title:'Диджей',note:'Музыка, фон, танцы, сопровождение'},{key:'dj+host',title:'Диджей и ведущий в одном лице',note:'Подходит для компактных мероприятий'},{key:'host',title:'Ведущий',note:'Можно добавить нашего DJ отдельно'}],'dj');
-  buildDiscounts();ids.forEach(id=>$(id)?.addEventListener('input',()=>{updateUI();calculate()}));ids.forEach(id=>$(id)?.addEventListener('change',()=>{updateUI();calculate()}));document.querySelectorAll('[data-open]').forEach(b=>b.addEventListener('click',()=>{const el=$(b.dataset.open);el.focus();try{el.showPicker&&el.showPicker()}catch(e){}}));$('datePickerButton').addEventListener('click',()=>{const el=$('eventDate');el.focus();try{el.showPicker&&el.showPicker()}catch(e){}});$('applyPreset').addEventListener('click',applyPreset);$('discountBtn')?.addEventListener('click',openDiscount);$('mobileDiscountBtn')?.addEventListener('click',openDiscount);$('closeDiscount').addEventListener('click',closeDiscount);$('applyDiscount').addEventListener('click',()=>{state.discountsApplied=true;closeDiscount();calculate()});updateUI();calculate();observeMobileFull()}
-function updateUI(){const exactDate=$('exactDate').checked, exactTime=$('exactTime').checked;$('dateWrap').classList.toggle('show',exactDate);$('timeWrap').classList.toggle('show',exactTime);const service=selectedRadio('service')||'dj', build=selectedRadio('buildMode')||'manual';$('manualBox').classList.toggle('hidden',build!=='manual');$('packageBox').classList.toggle('show',build==='package');$('djDetails').classList.toggle('show',service==='dj'||service==='dj+host');$('hostDetails').classList.toggle('show',service==='host'||service==='dj+host');$('hostSource').value=service==='host'?$('hostSource').value:'Будет наш';$('hostPresenceWrap').classList.toggle('hidden',service!=='dj');$('equipmentWrap').classList.toggle('show',(service==='dj'||service==='dj+host')&&$('equipmentMode').value==='С оборудованием');const guest=+$('guests').value;$('guestValue').textContent=guest;$('distanceValue').textContent=$('distanceKm').value+' км';$('distanceWrap').classList.toggle('show',$('outOfTown').checked);buildEquipmentCards();updateHoursOptions();updatePresetList()}
-function updateHoursOptions(){const min=minHours(),max=maxHours();const val=clamp(parseInt($('hours').value)||min,min,max);fillDatalist('hoursList',Array.from({length:max-min+1},(_,i)=>String(i+min)));$('hours').value=String(val);$('hoursHint').textContent=`Для некоторых мероприятий минимальный заказ — 3 часа. Сейчас доступно: ${min}–${max} ч.`}
-function minHours(){let min=1;const ev=CONFIG.eventTypes[keyByTitle(CONFIG.eventTypes,$('eventType').value)]||CONFIG.eventTypes.other;min=Math.max(min,ev.minHours||1);if($('exactDate').checked&&$('exactTime').checked){const d=new Date($('eventDate').value+'T00:00:00');const day=d.getDay(),hour=parseInt(($('startTime').value||'0').split(':')[0]);if((day===5||day===6)&&hour>=CONFIG.weekendEveningHour)min=Math.max(min,CONFIG.fridaySaturdayEveningMinHours)}return min}
-function maxHours(){const equipKey=selectedRadio('equipment')||'none';if($('equipmentMode').value!=='С оборудованием')return CONFIG.maxHoursDefault;return CONFIG.equipment[equipKey]?.maxHours||CONFIG.maxHoursDefault}
-function buildEquipmentCards(){const guest=+$('guests').value, service=selectedRadio('service')||'dj';const items=Object.entries(CONFIG.equipment).filter(([k])=>k!=='none').map(([k,v])=>({key:k,title:v.title,price:v.price,note:v.note,disabled:guest>v.maxGuests||(service==='dj+host'&&k==='mobile')}));const current=selectedRadio('equipment');let next=current&&!items.find(i=>i.key===current&&i.disabled)?current:items.find(i=>!i.disabled)?.key||'standard';cardGroup('equipmentCards','equipment',items,next);const equip=CONFIG.equipment[next];$('logisticsRow').classList.toggle('hidden',!(equip&&equip.power>1));}
-function updatePresetList(){const evKey=keyByTitle(CONFIG.eventTypes,$('eventType').value);const list=CONFIG.presets[evKey]||CONFIG.presets.other;fillDatalist('presetList',list.map(x=>x.title));if(!$('presetPackage').value||!list.some(x=>x.title===$('presetPackage').value))$('presetPackage').value=list[0].title}
-function applyPreset(){const evKey=keyByTitle(CONFIG.eventTypes,$('eventType').value);const list=CONFIG.presets[evKey]||CONFIG.presets.other;const p=list.find(x=>x.title===$('presetPackage').value)||list[0];document.querySelector(`input[name="buildMode"][value="manual"]`).checked=true;document.querySelector(`input[name="service"][value="${p.service}"]`).checked=true;$('hours').value=p.hours||3;$('djRole').value=titleBy(CONFIG.djRoles,p.djRole||'base');$('equipmentMode').value=p.equip==='none'?'Без оборудования':'С оборудованием';if(p.place)$('placeType').value=titleBy(CONFIG.places,p.place);if(p.hostRole)$('hostRole').value=titleBy(CONFIG.hostRoles,p.hostRole);updateUI();setTimeout(()=>{if(p.equip&&p.equip!=='none'){const r=document.querySelector(`input[name="equipment"][value="${p.equip}"]`);if(r){r.checked=true;}}calculate()},0)}
-function calcBaseRate(type,guests){const list=type==='host'?CONFIG.hostGuestRates:CONFIG.djGuestRates;const base=list.find(x=>guests<=x.to)?.rate||list.at(-1).rate;const days=Math.max(0,daysBetween(new Date(),new Date(CONFIG.baseDate+'T00:00:00')));return base+(type==='host'?CONFIG.hostDailyGrowth:CONFIG.djDailyGrowth)*days}
-function dayTimeMultiplier(){if(!$('exactDate').checked||!$('exactTime').checked)return 1;const d=new Date($('eventDate').value+'T00:00:00');const day=d.getDay(),hour=parseInt(($('startTime').value||'0').split(':')[0]);if(day===0)return CONFIG.dayTime.sunday;if((day===5||day===6)&&hour>=CONFIG.weekendEveningHour)return CONFIG.dayTime.fridaySaturdayEvening;if(day===5||day===6)return CONFIG.dayTime.fridaySaturday;return CONFIG.dayTime.weekday}
-function urgencyMultiplier(){if(!$('exactDate').checked)return 1;const diff=Math.max(0,daysBetween(new Date($('eventDate').value+'T00:00:00'),new Date()));return CONFIG.urgency.find(x=>diff<=x.to).multiplier}
-function travelCost(multiplier=1){if(!$('outOfTown').checked)return 0;const km=+$('distanceKm').value;const tier=CONFIG.travel.tiers.find(t=>km<=t.to)||CONFIG.travel.tiers.at(-1);return Math.max(CONFIG.travel.min,km*tier.rate)*multiplier}
-function currentKeys(){return{event:keyByTitle(CONFIG.eventTypes,$('eventType').value),place:keyByTitle(CONFIG.places,$('placeType').value),djRole:keyByTitle(CONFIG.djRoles,$('djRole').value),hostRole:keyByTitle(CONFIG.hostRoles,$('hostRole').value),hostKit:keyByTitle(CONFIG.hostKits,$('hostKit').value)}}
-function calculate(){const keys=currentKeys(), guests=+$('guests').value, hours=clamp(parseInt($('hours').value)||1,minHours(),maxHours()), service=selectedRadio('service')||'dj';$('hours').value=String(hours);const eventM=CONFIG.eventTypes[keys.event].multiplier, placeM=CONFIG.places[keys.place].multiplier, dayM=dayTimeMultiplier(), urgentM=urgencyMultiplier(), durM=CONFIG.duration[hours]||1;let lines=[],dj=0,host=0,equipTotal=0,extra=0,travel=0;
-  const hasDj=service==='dj'||service==='dj+host', hasHost=service==='host'||service==='dj+host';const equipMode=$('equipmentMode').value==='С оборудованием';const equipKey=equipMode?(selectedRadio('equipment')||'standard'):'none';const equip=CONFIG.equipment[equipKey]||CONFIG.equipment.none;
-  if(hasDj){let roleM=CONFIG.djRoles[keys.djRole].multiplier;let equipM=equipMode?CONFIG.djEquipmentInfluence.own:CONFIG.djEquipmentInfluence.noEquipment;let hostM=service==='dj+host'?CONFIG.djHostInfluence.djAndHost:CONFIG.djHostInfluence.onlyDj;if(service==='dj'&&$('hostPresence').value==='Есть ведущий клиента / партнёра')hostM=CONFIG.djHostInfluence.clientHost;if(service==='dj'&&$('hostPresence').value==='Нужен наш ведущий')hostM=CONFIG.djHostInfluence.providedHost;dj=calcBaseRate('dj',guests)*hours*durM*eventM*placeM*dayM*urgentM*roleM*equipM*hostM;lines.push(['Работа DJ',dj])}
-  if(equipMode&&hasDj){equipTotal+=equip.price; if(!['none','mobile'].includes(equipKey)&&!$('hasSocket').checked)equipTotal+=CONFIG.extras.generator;if(!$('hasInternet').checked)equipTotal+=CONFIG.extras.offlineInternet;if(equip.power>1&&$('logistics').checked)equipTotal+=CONFIG.extras.logistics;lines.push(['Оборудование: '+equip.title,equip.price]);if(!$('hasInternet').checked)lines.push(['Офлайн-подготовка музыки',CONFIG.extras.offlineInternet]);if(!['none','mobile'].includes(equipKey)&&!$('hasSocket').checked)lines.push(['Генератор',CONFIG.extras.generator]);if(equip.power>1&&$('logistics').checked)lines.push(['Доставка, монтаж и демонтаж',CONFIG.extras.logistics])}
-  if(hasHost){let roleM=CONFIG.hostRoles[keys.hostRole].multiplier;let djM=service==='dj+host'?CONFIG.hostDjInfluence.hostAndDj:(hasDj?CONFIG.hostDjInfluence.providedDj:CONFIG.hostDjInfluence.onlyHost);host=calcBaseRate('host',guests)*hours*durM*eventM*placeM*dayM*urgentM*roleM*djM;lines.push([service==='dj+host'?'Ведение в одном лице':'Работа ведущего',host]);const kit=CONFIG.hostKits[keys.hostKit];if(kit.price>0){extra+=kit.price;lines.push(['Реквизит / подготовка: '+kit.title,kit.price]);if($('logistics').checked){extra+=CONFIG.extras.logistics;lines.push(['Доставка реквизита',CONFIG.extras.logistics])}}}
-  const travelMultiplier=hasDj&&hasHost&&service!=='dj+host'?2:1;travel=travelCost(travelMultiplier);if(travel)lines.push(['Проезд за город',travel]);
-  if(!CONFIG.places[keys.place].parking){extra+=CONFIG.extras.noParking;lines.push(['Сложная парковка / перенос оборудования',CONFIG.extras.noParking])}
-  let subtotal=dj+equipTotal+host+extra+travel; if(subtotal<CONFIG.minimumDisplayedStart&&hasDj&&!equipMode&&!hasHost)subtotal=CONFIG.minimumDisplayedStart;
-  const reserve=subtotal*CONFIG.discountReservePercent/100;let afterReserve=subtotal+reserve;let discountPercent=state.discountsApplied?selectedDiscountPercent():0;let discount=afterReserve*discountPercent/100;let afterDiscount=afterReserve-discount;let cashlessAdd=0,vat=0;if($('cashless').checked){cashlessAdd=afterDiscount*(CONFIG.cashlessMultiplier-1);afterDiscount*=CONFIG.cashlessMultiplier;vat=afterDiscount*CONFIG.vatRate/(100+CONFIG.vatRate)}let rounded=Math.floor(afterDiscount/100)*100;
-  if(discountPercent>0)lines.push(['Скидка '+discountPercent+'%',-discount]);renderResult({total:rounded,raw:afterDiscount,vat,lines,hours,guests,cashless:$('cashless').checked})}
-function selectedDiscountPercent(){const checked=[...document.querySelectorAll('[name="discount"]:checked')].map(i=>i.value);const exclusive=checked.map(k=>CONFIG.discounts[k]).filter(d=>d.group==='exclusive').sort((a,b)=>b.percent-a.percent)[0];if(exclusive)return exclusive.percent;return checked.map(k=>CONFIG.discounts[k]).filter(d=>d.group==='stack').reduce((s,d)=>s+d.percent,0)}
-function renderResult(r){const html=`<div class="result-head"><div><div class="result-label">Итоговая стоимость</div><div class="price">${money(r.total)}</div>${r.cashless?`<div class="vat-note show">включая НДС 22%: <strong>${money(r.vat)}</strong></div>`:''}</div><div class="pill">${r.hours} ч • ${r.guests} гостей</div></div><div class="breakdown">${r.lines.filter(x=>Math.abs(x[1])>0).map(([n,v])=>`<div class="line-item ${v<0?'discount':''}"><span>${n}</span><strong>${v<0?'−':''}${money(Math.abs(v))}</strong></div>`).join('')}</div><div class="details-note">Итог округлён в пользу клиента до сотен. Детальные позиции выше показаны без округления.</div><div class="result-actions"><a class="btn" href="${CONFIG.phone}">Забронировать дату</a><button class="btn secondary" id="discountBtn" type="button">Хочу скидку</button></div>`;$('resultCard').innerHTML=html;$('mobileFullResult').innerHTML=html;$('mobileStickyPrice').textContent=money(r.total);document.querySelectorAll('#discountBtn').forEach(b=>b.addEventListener('click',openDiscount));document.querySelectorAll('.price').forEach(p=>{p.classList.add('bump');setTimeout(()=>p.classList.remove('bump'),160)})}
-function buildDiscounts(){$('discountList').innerHTML=Object.entries(CONFIG.discounts).map(([k,d])=>`<label class="check-item"><input type="checkbox" name="discount" value="${k}" data-group="${d.group}"><span><strong>${d.title}</strong><br><span class="hint">Скидка ${d.percent}%${d.group==='exclusive'?' — не суммируется с другими':' — может суммироваться с отзывом / рефералкой / оплатой сегодня'}</span></span></label>`).join('');$('discountList').querySelectorAll('input').forEach(i=>i.addEventListener('change',e=>{if(e.target.checked&&e.target.dataset.group==='exclusive')$('discountList').querySelectorAll('input').forEach(x=>{if(x!==e.target)x.checked=false});if(e.target.checked&&e.target.dataset.group==='stack')$('discountList').querySelectorAll('input[data-group="exclusive"]').forEach(x=>x.checked=false)}))}
-function openDiscount(){$('discountModal').classList.add('show');$('discountModal').setAttribute('aria-hidden','false')}function closeDiscount(){$('discountModal').classList.remove('show');$('discountModal').setAttribute('aria-hidden','true')}
-function observeMobileFull(){const obs=new IntersectionObserver(entries=>{entries.forEach(e=>$('mobileSticky').classList.toggle('is-hidden',e.isIntersecting))},{threshold:.15});obs.observe($('mobileFullResult'))}
-init();
-</script>
+      <div class="discount-grid" id="discountGrid"></div>
+      <p class="hint">Партнёрская скидка и долгосрочный договор выбираются отдельно. Отзыв, бронь сегодня и друзья могут суммироваться.</p>
+      <div class="modal-actions">
+        <button class="btn muted-btn" id="clearDiscounts" type="button">Без скидки</button>
+        <button class="btn primary-btn" id="applyDiscounts" type="button">Подтвердить</button>
+      </div>
+    </section>
+  </div>
+
+  <script src="./data/pricing.js"></script>
+  <script src="./data/content.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
