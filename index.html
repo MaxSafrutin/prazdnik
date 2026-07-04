@@ -34,7 +34,6 @@
                 <select id="eventType" aria-label="Выберите тип мероприятия"></select>
                 <button class="pick-btn" type="button" data-open-control="eventType" aria-label="Открыть список типов мероприятия">◆</button>
               </div>
-              <span class="hint">Для некоторых мероприятий минимальный заказ — 3 часа.</span>
             </div>
 
             <div class="field">
@@ -47,9 +46,13 @@
 
             <div class="field full after-basic">
               <label for="guests">Количество гостей: <strong id="guestValue">2</strong></label>
-              <input id="guests" class="range" type="range" min="2" max="200" step="1" value="2">
-              <div class="range-line">
-                <span>2</span><span>50</span><span>80</span><span>110</span><span>140</span><span>170</span><span>200</span>
+              <input id="guests" class="range" type="range" min="0" max="30" step="1" value="0">
+              <div class="range-line range-line-guests">
+                <span style="--pos: 0%">2</span>
+                <span style="--pos: 3.33%">5</span>
+                <span style="--pos: 33.33%">50</span>
+                <span style="--pos: 66.67%">100</span>
+                <span style="--pos: 100%">150</span>
               </div>
             </div>
 
@@ -81,7 +84,6 @@
                   <button class="pick-btn" id="timePickerButton" type="button" aria-label="Открыть выбор времени">🕓</button>
                 </div>
               </div>
-              <span class="hint">Для пятницы и субботы после 16:00 минимальный заказ — 3 часа.</span>
             </div>
 
           </div>
@@ -229,15 +231,15 @@
         <div class="result-head">
           <div>
             <div class="result-label">Итоговая стоимость</div>
-            <div class="price" id="totalPrice">0 ₽</div>
-            <div class="vat-note" id="vatNote">НДС не применяется</div>
+            <div class="price" id="totalPrice">1 500 ₽</div>
+            <div class="vat-note" id="vatNote">Оплата наличными или переводом по СБП после мероприятия</div>
           </div>
           <div class="pill" id="scenarioPill">2 гостя • 3 часа</div>
         </div>
         <div class="breakdown" id="breakdown"></div>
         <div class="result-actions">
           <button class="btn muted-btn" id="discountButton" type="button">Хочу скидку</button>
-          <a class="btn primary-btn" href="tel:+79272651777">Забронировать дату</a>
+          <button class="btn primary-btn" id="bookingButton" type="button">Забронировать дату</button>
         </div>
       </aside>
     </section>
@@ -259,6 +261,25 @@
       <div class="modal-actions">
         <button class="btn muted-btn" id="clearDiscounts" type="button">Без скидки</button>
         <button class="btn primary-btn" id="applyDiscounts" type="button">Подтвердить</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal" id="bookingModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-booking></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+      <div class="modal-head">
+        <div>
+          <div class="eyebrow">Бронь</div>
+          <h2 id="bookingTitle">Как удобнее связаться?</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-booking aria-label="Закрыть">×</button>
+      </div>
+      <p class="hint booking-hint">Можно позвонить сразу или скопировать собранную смету, чтобы отправить её в мессенджер или на почту.</p>
+      <textarea class="booking-text" id="bookingText" readonly></textarea>
+      <div class="modal-actions booking-actions">
+        <a class="btn primary-btn" id="bookingCall" href="tel:+79272651777">Позвонить</a>
+        <button class="btn muted-btn" id="bookingCopy" type="button">Написать</button>
       </div>
     </section>
   </div>

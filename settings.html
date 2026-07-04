@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Настройки калькулятора — MAX SAFRUTIN</title>
+  <meta name="description" content="Закрытая страница ручной настройки ставок, коэффициентов и скидок калькулятора.">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="app admin-app">
+    <header class="topbar">
+      <section class="brand" aria-labelledby="settingsTitle">
+        <div class="eyebrow">MAX SAFRUTIN</div>
+        <h1 id="settingsTitle">Настройки калькулятора</h1>
+        <p class="subtitle">
+          <span>Закрытая страница для ручной правки ставок и коэффициентов</span>
+          <span>После изменений экспортируйте файлы и замените их в папке data</span>
+        </p>
+      </section>
+    </header>
+
+    <section class="panel admin-panel">
+      <div class="admin-toolbar">
+        <button class="btn primary-btn" id="downloadJson" type="button">Скачать pricing.json</button>
+        <button class="btn muted-btn" id="downloadJs" type="button">Скачать pricing.js</button>
+        <button class="btn muted-btn" id="copyJson" type="button">Скопировать JSON</button>
+      </div>
+      <p class="hint">Эта страница работает в браузере и не записывает файлы сама. Для GitHub Pages нужно заменить экспортированные файлы вручную в папке data.</p>
+    </section>
+
+    <form class="admin-grid" id="settingsForm" autocomplete="off"></form>
+  </main>
+
+  <script src="./data/pricing.js"></script>
+  <script src="./settings.js"></script>
+</body>
+</html>

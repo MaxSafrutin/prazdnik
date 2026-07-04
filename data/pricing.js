@@ -193,11 +193,11 @@ window.__PRICING__ = {
       "hostPresenceMultiplier": 1.7
     },
     "clientHost": {
-      "label": "DJ, отдельный ведущий клиента/другой ведущий",
+      "label": "DJ с нашим ведущим",
       "hostPresenceMultiplier": 1
     },
     "providedHost": {
-      "label": "DJ, отдельный мой ведущий",
+      "label": "DJ с вашим ведущим",
       "hostPresenceMultiplier": 0.98
     }
   },
@@ -281,11 +281,11 @@ window.__PRICING__ = {
       "djPresenceMultiplier": 1.7
     },
     "clientDj": {
-      "label": "Ведущий, отдельный DJ клиента/другой DJ",
+      "label": "Ведущий с нашим DJ",
       "djPresenceMultiplier": 1
     },
     "providedDj": {
-      "label": "Ведущий, отдельный мой DJ",
+      "label": "Ведущий с вашим DJ",
       "djPresenceMultiplier": 0.98
     }
   },
@@ -388,8 +388,8 @@ window.__PRICING__ = {
       "group": "stackable"
     },
     "today": {
-      "label": "Бронирую сегодня",
-      "percent": 3,
+      "label": "Бронирую сегодня предоплатой от 20% от общей суммы",
+      "percent": 5,
       "group": "stackable"
     },
     "partner": {
@@ -399,7 +399,7 @@ window.__PRICING__ = {
     },
     "longTerm": {
       "label": "Долгосрочный договор",
-      "percent": 15,
+      "percent": 20,
       "group": "exclusive"
     }
   }

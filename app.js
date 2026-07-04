@@ -3,7 +3,10 @@ const state = {
   content: null,
   lastResult: null,
   appliedDiscounts: [],
-  serviceType: ""
+  serviceType: "",
+  displayedTotal: null,
+  priceAnimation: null,
+  syncResultDock: null
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -12,22 +15,25 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 const serviceDetails = {
   dj: [
     { value: "djNoHost", label: "Без ведущего", djMode: "onlyDj", hostMode: "none" },
-    { value: "djOurHost", label: "С нашим ведущим", djMode: "providedHost", hostMode: "providedDj" },
-    { value: "djTheirHost", label: "С их ведущим", djMode: "clientHost", hostMode: "none" }
+    { value: "djClientHost", label: "С нашим ведущим", djMode: "clientHost", hostMode: "none" },
+    { value: "djProvidedHost", label: "С вашим ведущим", djMode: "providedHost", hostMode: "providedDj" }
   ],
   host: [
     { value: "hostNoDj", label: "Без диджея", djMode: "none", hostMode: "onlyHost" },
-    { value: "hostOurDj", label: "С нашим диджеем", djMode: "providedHost", hostMode: "providedDj" },
-    { value: "hostTheirDj", label: "С их диджеем", djMode: "none", hostMode: "clientDj" }
+    { value: "hostClientDj", label: "С нашим диджеем", djMode: "none", hostMode: "clientDj" },
+    { value: "hostProvidedDj", label: "С вашим диджеем", djMode: "providedHost", hostMode: "providedDj" }
   ],
   both: [
     { value: "bothDjAccent", label: "Универсал (акцент DJ)", djMode: "djHostSame", hostMode: "none" },
     { value: "bothLeaderAccent", label: "Универсал (акцент ведущий)", djMode: "none", hostMode: "hostDjSame" },
-    { value: "bothOurBoth", label: "Наш DJ + Наш ведущий", djMode: "providedHost", hostMode: "providedDj" },
-    { value: "bothOurDjTheirLeader", label: "Наш DJ + Их ведущий", djMode: "clientHost", hostMode: "none" },
-    { value: "bothTheirDjOurLeader", label: "Их DJ + Наш ведущий", djMode: "none", hostMode: "clientDj" }
+    { value: "bothProvidedDjClientLeader", label: "Ваш DJ + Наш ведущий", djMode: "clientHost", hostMode: "none" },
+    { value: "bothProvidedBoth", label: "Ваш DJ + Ваш ведущий", djMode: "providedHost", hostMode: "providedDj" },
+    { value: "bothClientDjProvidedLeader", label: "Наш DJ + Ваш ведущий", djMode: "none", hostMode: "clientDj" }
   ]
 };
+
+const minimumDisplayTotal = 1500;
+const guestSteps = [2, ...Array.from({ length: 30 }, (_, index) => (index + 1) * 5)];
 
 const fields = {
   eventType: $("#eventType"),
@@ -73,6 +79,9 @@ const ui = {
   resultCard: $("#resultCard"),
   resultDockSentinel: $("#resultDockSentinel"),
   totalPrice: $("#totalPrice"),
+  bookingButton: $("#bookingButton"),
+  bookingCopy: $("#bookingCopy"),
+  bookingText: $("#bookingText"),
   vatNote: $("#vatNote"),
   scenarioPill: $("#scenarioPill"),
   breakdown: $("#breakdown")
@@ -161,7 +170,7 @@ function setInitialValues() {
   fields.eventType.value = "";
   fields.hours.value = "";
   fields.startTime.value = "16:00";
-  fields.guests.value = "2";
+  fields.guests.value = "0";
   fields.serviceDetail.value = "";
   fields.djMode.value = "none";
   fields.djRole.value = "basic";
@@ -224,11 +233,19 @@ function bindEvents() {
     closeDiscountModal();
     recalculate();
   });
+  ui.bookingButton.addEventListener("click", openBookingModal);
+  ui.bookingCopy.addEventListener("click", copyBookingSummary);
   $$("[data-close-modal]").forEach((node) => {
     node.addEventListener("click", closeDiscountModal);
   });
+  $$("[data-close-booking]").forEach((node) => {
+    node.addEventListener("click", closeBookingModal);
+  });
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeDiscountModal();
+    if (event.key === "Escape") {
+      closeDiscountModal();
+      closeBookingModal();
+    }
   });
 }
 
@@ -343,7 +360,7 @@ function updateUiState() {
   ui.dateWrap.classList.toggle("is-visible", fields.useExactDate.checked);
   ui.timeWrap.classList.toggle("is-visible", fields.useExactTime.checked);
   ui.distanceWrap.classList.toggle("is-visible", fields.outOfTown.checked);
-  ui.guestValue.textContent = fields.guests.value;
+  ui.guestValue.textContent = getGuestValue();
   ui.distanceValue.textContent = `${fields.distanceKm.value} км`;
 
   const withDjEquipment = fields.djEquipmentMode.value === "own" && hasDj;
@@ -378,7 +395,7 @@ function readValues() {
     date: fields.eventDate.value,
     useExactTime: fields.useExactTime.checked,
     time: fields.startTime.value || "16:00",
-    guests: Number(fields.guests.value),
+    guests: getGuestValue(),
     serviceType: state.serviceType,
     serviceDetail: fields.serviceDetail.value,
     djMode: fields.djMode.value,
@@ -399,6 +416,10 @@ function readValues() {
   };
 }
 
+function getGuestValue() {
+  return guestSteps[Number(fields.guests.value)] || guestSteps[0];
+}
+
 function openDiscountModal() {
   $$('input[name="discount"]').forEach((input) => {
     input.checked = state.appliedDiscounts.includes(input.value);
@@ -412,6 +433,34 @@ function closeDiscountModal() {
   const modal = $("#discountModal");
   modal.classList.remove("is-open");
   modal.setAttribute("aria-hidden", "true");
+}
+
+function openBookingModal() {
+  ui.bookingCopy.textContent = "Написать";
+  ui.bookingText.value = buildBookingText(readValues(), state.lastResult || emptyResult());
+  const modal = $("#bookingModal");
+  modal.classList.add("is-open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeBookingModal() {
+  const modal = $("#bookingModal");
+  modal.classList.remove("is-open");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+async function copyBookingSummary() {
+  const text = buildBookingText(readValues(), state.lastResult || emptyResult());
+  ui.bookingText.value = text;
+  try {
+    await navigator.clipboard.writeText(text);
+    ui.bookingCopy.textContent = "Смета скопирована";
+  } catch {
+    ui.bookingText.focus();
+    ui.bookingText.select();
+    document.execCommand("copy");
+    ui.bookingCopy.textContent = "Смета скопирована";
+  }
 }
 
 function recalculate() {
@@ -531,7 +580,6 @@ function calculate(values) {
 
   const beforeReserve = sum(rows);
   const reserve = beforeReserve * (pricing.meta.reservePercent / 100);
-  rows.push(line("Запас на подготовку", reserve, [`${pricing.meta.reservePercent}% от суммы до запаса`]));
 
   const withReserve = beforeReserve + reserve;
   const discountPercent = getDiscountPercent(values.discounts);
@@ -577,7 +625,7 @@ function emptyResult(rows = []) {
     discountPercent: 0,
     discount: 0,
     totalBeforeRound: 0,
-    total: 0,
+    total: minimumDisplayTotal,
     vat: 0,
     rate: null,
     inflatedDjRate: 0,
@@ -588,13 +636,13 @@ function emptyResult(rows = []) {
 }
 
 function renderResult(values, result) {
-  ui.totalPrice.textContent = formatMoney(result.total);
+  animateTotal(result.total);
   ui.scenarioPill.textContent = values.hours
     ? `${values.hours} ${plural(values.hours, "час", "часа", "часов")} • ${values.guests} ${plural(values.guests, "гость", "гостя", "гостей")}`
     : "Выберите параметры";
   ui.vatNote.innerHTML = result.vat > 0
     ? `включая НДС 22%: <strong>${formatMoney(result.vat)}</strong>`
-    : "НДС не применяется";
+    : "Оплата наличными или переводом по СБП после мероприятия";
 
   ui.breakdown.innerHTML = result.rows.map((row) => `
     <div class="line-item">
@@ -605,6 +653,71 @@ function renderResult(values, result) {
       <b>${formatMoney(row.amount)}</b>
     </div>
   `).join("");
+}
+
+function animateTotal(nextTotal) {
+  if (state.priceAnimation) cancelAnimationFrame(state.priceAnimation);
+  const from = state.displayedTotal ?? nextTotal;
+  const to = Math.max(minimumDisplayTotal, Math.round(nextTotal));
+  const start = performance.now();
+  const duration = 520;
+
+  const tick = (now) => {
+    const progress = Math.min(1, (now - start) / duration);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(from + (to - from) * eased);
+    ui.totalPrice.textContent = formatMoney(current);
+    if (progress < 1) {
+      state.priceAnimation = requestAnimationFrame(tick);
+    } else {
+      state.displayedTotal = to;
+      ui.totalPrice.textContent = formatMoney(to);
+    }
+  };
+
+  state.priceAnimation = requestAnimationFrame(tick);
+}
+
+function buildBookingText(values, result) {
+  const eventLabel = state.pricing.eventTypes[values.eventType]?.label || "не выбран";
+  const placeLabel = state.pricing.places[values.placeType]?.label || "не выбрано";
+  const compositionLabel = getServiceDetailLabel(values.serviceDetail) || "не выбран";
+  const lines = [
+    "Здравствуйте! Хочу уточнить бронь мероприятия.",
+    "",
+    `Тип мероприятия: ${eventLabel}`,
+    `Длительность: ${values.hours || "не выбрано"} ${values.hours ? plural(values.hours, "час", "часа", "часов") : ""}`.trim(),
+    `Гостей: ${values.guests}`,
+    `Состав: ${compositionLabel}`,
+    `Площадка: ${placeLabel}`,
+    values.useExactDate && values.date ? `Дата: ${values.date}` : "Дата: пока не указана точно",
+    values.useExactTime && values.time ? `Время начала: ${values.time}` : "Время начала: пока не указано точно"
+  ];
+
+  if (values.outOfTown) lines.push(`Выезд за город: ${values.distanceKm} км`);
+  if (values.noInternet) lines.push("Особенность: нет интернета");
+  if (values.needGenerator) lines.push("Особенность: нужен генератор");
+  if (values.noParking) lines.push("Особенность: нет парковки");
+  if (values.cashless) lines.push("Оплата: юр. лицо с полным НДС 22%");
+
+  lines.push("", "Смета:");
+  if (result.rows.length) {
+    result.rows.forEach((row) => {
+      const details = row.details.length ? ` (${row.details.join("; ")})` : "";
+      lines.push(`- ${row.title}: ${formatMoney(row.amount)}${details}`);
+    });
+  } else {
+    lines.push("- Позиции ещё не выбраны полностью");
+  }
+
+  if (result.discountPercent) lines.push(`Скидка: −${result.discountPercent}%`);
+  lines.push(`Итого предварительно: ${formatMoney(result.total)}`);
+  lines.push("", "Прошу подтвердить возможность и точную стоимость.");
+  return lines.join("\n");
+}
+
+function getServiceDetailLabel(value) {
+  return Object.values(serviceDetails).flat().find((item) => item.value === value)?.label || "";
 }
 
 function getGuestRate(guests) {

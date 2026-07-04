@@ -220,7 +220,8 @@ input[type="number"] {
 }
 
 .control select {
-  padding-left: 52px;
+  padding-right: 52px;
+  padding-left: 14px;
 }
 
 .control input:focus,
@@ -242,7 +243,7 @@ select {
   content: attr(data-symbol);
   position: absolute;
   top: 7px;
-  left: 7px;
+  right: 7px;
   z-index: 2;
   display: grid;
   width: 32px;
@@ -257,15 +258,7 @@ select {
 }
 
 .select-control::after {
-  content: "⌄";
-  position: absolute;
-  top: 50%;
-  right: 16px;
-  z-index: 2;
-  transform: translateY(-54%);
-  color: var(--gold);
-  font-size: 18px;
-  pointer-events: none;
+  content: "";
 }
 
 .pick-btn {
@@ -319,6 +312,7 @@ select {
   border-radius: 5px;
   background: #0f0f12;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  align-self: center;
 }
 
 .check-label input::before,
@@ -330,6 +324,11 @@ select {
   border-radius: 3px;
   background: linear-gradient(135deg, var(--gold), var(--gold-2));
   transition: transform 0.12s ease;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  opacity: 0;
 }
 
 .check-label input:checked,
@@ -418,6 +417,26 @@ select {
   font-size: 11px;
 }
 
+.range-line-guests {
+  position: relative;
+  display: block;
+  height: 16px;
+}
+
+.range-line-guests span {
+  position: absolute;
+  left: var(--pos);
+  transform: translateX(-50%);
+}
+
+.range-line-guests span:first-child {
+  transform: translateX(0);
+}
+
+.range-line-guests span:last-child {
+  transform: translateX(-100%);
+}
+
 .discount-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -444,6 +463,10 @@ select {
   position: sticky;
   top: 16px;
   padding: 18px;
+}
+
+.result-dock-sentinel {
+  display: none;
 }
 
 .result-head {
@@ -614,6 +637,108 @@ select {
   margin-top: 16px;
 }
 
+.modal-card > .hint {
+  margin-top: 18px;
+}
+
+.booking-hint {
+  margin-bottom: 0;
+}
+
+.booking-text {
+  width: 100%;
+  min-height: 160px;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--input);
+  resize: vertical;
+  outline: none;
+}
+
+.booking-text:focus {
+  border-color: var(--gold-2);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+.admin-app {
+  width: min(1280px, calc(100% - 28px));
+}
+
+.admin-panel {
+  margin-bottom: 16px;
+}
+
+.admin-toolbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.admin-card {
+  align-content: start;
+}
+
+.admin-card h2 {
+  margin: 0 0 14px;
+  font-size: 18px;
+}
+
+.admin-row {
+  display: grid;
+  grid-template-columns: minmax(90px, 0.32fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.075);
+}
+
+.admin-key {
+  color: var(--gold);
+  font-size: 12px;
+  font-weight: 900;
+  overflow-wrap: anywhere;
+}
+
+.admin-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.admin-input {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-input span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.admin-input input {
+  width: 100%;
+  min-height: 42px;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--input);
+  outline: none;
+}
+
+.admin-input input:focus {
+  border-color: var(--gold-2);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
 @media (max-width: 920px) {
   .layout {
     grid-template-columns: 1fr;
@@ -653,6 +778,7 @@ select {
   }
 
   .result-dock-sentinel {
+    display: block;
     height: 1px;
   }
 
@@ -673,30 +799,49 @@ select {
   }
 
   .result-card.is-docked .result-head {
-    align-items: center;
+    align-items: flex-start;
     padding-bottom: 0;
     border-bottom: 0;
   }
 
-  .result-card.is-docked .result-label,
-  .result-card.is-docked .vat-note,
   .result-card.is-docked .breakdown,
   .result-card.is-docked .result-actions {
     display: none;
   }
 
   .result-card.is-docked .price {
-    margin-top: 0;
+    margin-top: 3px;
     font-size: 28px;
   }
 
+  .result-card.is-docked .vat-note {
+    max-width: 220px;
+    font-size: 11px;
+    line-height: 1.3;
+  }
+
   .result-card.is-docked .pill {
-    max-width: 46%;
+    max-width: 48%;
     text-align: right;
     white-space: normal;
   }
 
+  .result-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .result-actions .primary-btn {
+    order: -1;
+  }
+
   .modal-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-toolbar,
+  .admin-grid,
+  .admin-row,
+  .admin-fields {
     grid-template-columns: 1fr;
   }
 }
