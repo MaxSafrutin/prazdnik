@@ -6,7 +6,15 @@ const state = {
   serviceType: "",
   displayedTotal: null,
   priceAnimation: null,
-  syncResultDock: null
+  syncResultDock: null,
+  buildMode: "",
+  selectedPackage: "",
+  kitMode: "packages",
+  propsMode: "packages",
+  selectedDjKits: [],
+  selectedHostProps: [],
+  selectedKitPackage: "",
+  selectedPropsPackage: "none"
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -34,6 +42,106 @@ const serviceDetails = {
 
 const minimumDisplayTotal = 1500;
 const guestSteps = [2, ...Array.from({ length: 30 }, (_, index) => (index + 1) * 5)];
+const readyPackages = [
+  {
+    key: "easy",
+    title: "Минимальный",
+    note: "Аккуратный базовый набор без лишнего",
+    djRole: "basic",
+    djEquipmentMode: "own",
+    djKit: "jbl",
+    hostRole: "host",
+    hostProps: "none"
+  },
+  {
+    key: "balanced",
+    title: "Оптимальный",
+    note: "Самый универсальный вариант для праздника",
+    djRole: "contest",
+    djEquipmentMode: "own",
+    djKit: "standard",
+    hostRole: "host",
+    hostProps: "light"
+  },
+  {
+    key: "premium",
+    title: "Максимальный",
+    note: "Больше света, реквизита и вовлечения",
+    djRole: "clubMc",
+    djEquipmentMode: "own",
+    djKit: "pro",
+    hostRole: "mc",
+    hostProps: "standardLux"
+  }
+];
+
+const manualDjEquipment = {
+  speakerOne: { label: "Одна активная колонка", price: 1500 },
+  speakersTwo: { label: "Две активные колонки", price: 3000 },
+  speakerStands: { label: "Стойки под колонки", price: 800 },
+  floorSubs: { label: "Напольные сабвуферы", price: 5000 },
+  soundKw: { label: "Доп. мощность звука до 2 кВт", price: 4000 },
+  wirelessMic: { label: "Беспроводной микрофон", price: 1000 },
+  lightPair: { label: "Пара светоприборов", price: 2000 },
+  movingHeads: { label: "Движущийся свет", price: 6000 },
+  smokeMachine: { label: "Дым-машина", price: 3000 },
+  projector: { label: "Проектор", price: 4000 },
+  screen: { label: "Экран для проектора", price: 3000 },
+  tvPanel: { label: "Телевизор / LED-панель", price: 6000 },
+  foamMachine: {
+    label: "Пенная машина",
+    price: 18000,
+    extraRows: [
+      { title: "Оператор пенной машины", amount: 5000, details: ["обязателен для пенной вечеринки"] },
+      { title: "Доставка газелью и техники", amount: 9000, details: ["крупногабаритное оборудование"] }
+    ]
+  },
+  extraCar: { label: "Дополнительный автомобиль под оборудование", price: 5000 },
+  techCrew: { label: "Техники на монтаж / демонтаж", price: 6000 }
+};
+
+const manualHostEquipment = {
+  timing: { label: "Написать индивидуальный тайминг", price: 1500 },
+  scenario: { label: "Написать сценарий под событие", price: 5000 },
+  specialists: { label: "Подобрать артистов и специалистов", price: 1500 },
+  contestPrizes: { label: "Призы для конкурсов", price: 3000 },
+  mobileProps: { label: "Мобильный реквизит", price: 2000 },
+  themedProps: { label: "Тематический реквизит", price: 7000 },
+  projector: { label: "Экран с проектором", price: 7000 },
+  tvPanel: { label: "Телевизор / LED-панель", price: 6000 },
+  quizButton: { label: "Кнопочная система для квиза", price: 8000 },
+  assistant: { label: "Помощник ведущего", price: 5000 },
+  operator: { label: "Отдельный оператор на площадке", price: 7000 },
+  animator: { label: "Аниматор / игротехник", price: 6000 },
+  coverSinger: { label: "Кавер-исполнитель", price: 18000 },
+  danceShow: { label: "Танцевальное шоу", price: 22000 },
+  magician: { label: "Фокусник / иллюзионист", price: 20000 },
+  photoZone: { label: "Фотозона", price: 15000 },
+  artistSet: { label: "Набор артистов под программу", price: 45000 }
+};
+
+const kitPackages = [
+  { key: "jbl", title: "Мобильный", items: ["jbl"] },
+  { key: "standard", title: "Стандарт", items: ["standard"] },
+  { key: "pro", title: "Профи", items: ["pro"] },
+  { key: "light", title: "Лёгкий комплект", items: ["light"] },
+  { key: "lightLux", title: "Лёгкий Люкс", items: ["lightLux"] },
+  { key: "standardLux", title: "Стандарт Люкс", items: ["standardLux"] },
+  { key: "proLux", title: "Профи Люкс", items: ["proLux"] }
+];
+
+const propsPackages = [
+  { key: "none", title: "Минимум", items: [] },
+  { key: "standard", title: "Стандарт", items: ["light"] },
+  { key: "pro", title: "Профи", items: ["pro"] },
+  { key: "timing", title: "Тайминг", items: ["timing"] },
+  { key: "specialists", title: "Специалисты", items: ["specialists"] },
+  { key: "mobile", title: "Мобильный реквизит", items: ["mobile"] },
+  { key: "lightLux", title: "Лёгкий Люкс", items: ["lightLux"] },
+  { key: "standardFull", title: "Стандарт с экраном", items: ["standard"] },
+  { key: "standardLux", title: "Стандарт Люкс", items: ["standardLux"] },
+  { key: "proLux", title: "Профи Люкс", items: ["proLux"] }
+];
 
 const fields = {
   eventType: $("#eventType"),
@@ -69,6 +177,12 @@ const ui = {
   compositionSection: $("#compositionSection"),
   serviceDetailWrap: $("#serviceDetailWrap"),
   serviceDetailButtons: $("#serviceDetailButtons"),
+  modeSection: $("#modeSection"),
+  packageGrid: $("#packageGrid"),
+  djKitChoices: $("#djKitChoices"),
+  djKitPackages: $("#djKitPackages"),
+  hostPropsChoices: $("#hostPropsChoices"),
+  hostPropsPackages: $("#hostPropsPackages"),
   djSection: $("#djSection"),
   hostSection: $("#hostSection"),
   techSection: $("#techSection"),
@@ -132,7 +246,7 @@ function buildControls() {
   fillSelect(fields.hostMode, state.pricing.hostModes);
   fillSelect(fields.hostRole, state.pricing.hostRoles);
   fillSelect(fields.hostProps, state.pricing.hostProps, true);
-  fillSelect(fields.placeType, state.pricing.places);
+  fillSelect(fields.placeType, state.pricing.places, false, "Место проведения");
 
   fields.hours.innerHTML = [
     '<option value="">Выберите кол-во часов</option>',
@@ -143,6 +257,8 @@ function buildControls() {
   ].join("");
 
   renderServiceDetails();
+  renderPackages();
+  renderEquipmentChoices();
 
   $("#timeOptions").innerHTML = timeOptions().map((time) => `<option value="${time}"></option>`).join("");
 
@@ -169,22 +285,20 @@ function fillSelect(select, options, showPrice = false, placeholder = "") {
 function setInitialValues() {
   fields.eventType.value = "";
   fields.hours.value = "";
-  fields.startTime.value = "16:00";
+  fields.startTime.value = "";
   fields.guests.value = "0";
   fields.serviceDetail.value = "";
   fields.djMode.value = "none";
   fields.djRole.value = "basic";
   fields.djEquipmentMode.value = "own";
-  fields.djKit.value = "light";
+  fields.djKit.value = "none";
   fields.hostMode.value = "none";
   fields.hostRole.value = "host";
   fields.hostProps.value = "none";
-  fields.placeType.value = "restaurant";
+  fields.placeType.value = "";
   fields.distanceKm.value = "10";
 
-  const date = new Date();
-  date.setDate(date.getDate() + 14);
-  fields.eventDate.value = toDateInput(date);
+  fields.eventDate.value = "";
 }
 
 function bindEvents() {
@@ -208,8 +322,79 @@ function bindEvents() {
   $$("[data-service-type]").forEach((button) => {
     button.addEventListener("click", () => {
       state.serviceType = button.dataset.serviceType;
+      state.buildMode = "";
+      state.selectedPackage = "";
       renderServiceDetails();
+      renderPackages();
       applyComposition();
+      updateUiState();
+      recalculate();
+    });
+  });
+
+  $$("[data-build-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.buildMode = button.dataset.buildMode;
+      state.selectedPackage = "";
+      renderPackages();
+      updateUiState();
+      recalculate();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const serviceButton = event.target.closest("[data-service-type]");
+    if (serviceButton) {
+      state.serviceType = serviceButton.dataset.serviceType;
+      state.buildMode = "";
+      state.selectedPackage = "";
+      renderServiceDetails();
+      renderPackages();
+      applyComposition();
+      updateUiState();
+      recalculate();
+      return;
+    }
+
+    const detailButton = event.target.closest("[data-service-detail]");
+    if (detailButton) {
+      fields.serviceDetail.value = detailButton.dataset.serviceDetail;
+      state.buildMode = "";
+      state.selectedPackage = "";
+      applyComposition();
+      renderPackages();
+      updateUiState();
+      recalculate();
+      return;
+    }
+
+    const buildButton = event.target.closest("[data-build-mode]");
+    if (buildButton) {
+      state.buildMode = buildButton.dataset.buildMode;
+      state.selectedPackage = "";
+      renderPackages();
+      updateUiState();
+      recalculate();
+    }
+  });
+
+  $$("[data-kit-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.kitMode = button.dataset.kitMode;
+      state.selectedDjKits = [];
+      state.selectedKitPackage = "";
+      renderEquipmentChoices();
+      updateUiState();
+      recalculate();
+    });
+  });
+
+  $$("[data-props-mode]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.propsMode = button.dataset.propsMode;
+      state.selectedHostProps = [];
+      state.selectedPropsPackage = state.propsMode === "packages" ? "none" : "";
+      renderEquipmentChoices();
       updateUiState();
       recalculate();
     });
@@ -247,6 +432,9 @@ function bindEvents() {
       closeBookingModal();
     }
   });
+
+  fields.eventDate.addEventListener("input", syncDateTimeFlags);
+  fields.startTime.addEventListener("input", syncDateTimeFlags);
 }
 
 function renderServiceDetails() {
@@ -266,6 +454,194 @@ function renderServiceDetails() {
   bindServiceDetailButtons();
 }
 
+function renderPackages() {
+  $$("[data-build-mode]").forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.buildMode === state.buildMode);
+  });
+
+  if (!ui.packageGrid) return;
+  if (state.buildMode !== "packages") {
+    ui.packageGrid.innerHTML = "";
+    return;
+  }
+
+  ui.packageGrid.innerHTML = readyPackages.map((pack) => {
+    const result = previewPackage(pack);
+    return `
+      <article class="package-card ${state.selectedPackage === pack.key ? "is-active" : ""}">
+        <div>
+          <strong>${pack.title}</strong>
+          <span>${pack.note}</span>
+        </div>
+        <b>${formatMoney(result.total)}</b>
+        <button class="btn ${state.selectedPackage === pack.key ? "primary-btn" : "muted-btn"}" type="button" data-package="${pack.key}">
+          ${state.selectedPackage === pack.key ? "Выбрано" : "См. детали"}
+        </button>
+      </article>
+    `;
+  }).join("");
+
+  $$("[data-package]").forEach((button) => {
+    button.addEventListener("click", () => applyPackage(button.dataset.package));
+  });
+}
+
+function renderEquipmentChoices() {
+  renderModeButtons("[data-kit-mode]", state.kitMode);
+  renderModeButtons("[data-props-mode]", state.propsMode);
+  renderOptionChecks(ui.djKitChoices, manualDjEquipment, state.selectedDjKits, "dj-kit", state.kitMode === "manual");
+  renderOptionChecks(ui.hostPropsChoices, manualHostEquipment, state.selectedHostProps, "host-prop", state.propsMode === "manual");
+  renderMiniPackages(ui.djKitPackages, kitPackages, state.selectedKitPackage, "kit-package", state.kitMode === "packages", state.pricing.djKits);
+  renderMiniPackages(ui.hostPropsPackages, propsPackages, state.selectedPropsPackage, "props-package", state.propsMode === "packages", state.pricing.hostProps);
+  bindEquipmentChoices();
+  syncSelectFallbacks();
+}
+
+function renderModeButtons(selector, active) {
+  $$(selector).forEach((button) => {
+    const value = button.dataset.kitMode || button.dataset.propsMode;
+    button.classList.toggle("is-active", value === active);
+  });
+}
+
+function renderOptionChecks(container, options, selected, name, visible) {
+  if (!container) return;
+  container.classList.toggle("is-visible", visible);
+  container.innerHTML = Object.entries(options)
+    .filter(([key]) => key !== "none")
+    .map(([key, item]) => `
+      <label class="option-choice">
+        <input type="checkbox" data-${name}="${key}" ${selected.includes(key) ? "checked" : ""}>
+        <span>${item.label}</span>
+        <b>${formatMoney(item.price)}</b>
+      </label>
+    `).join("");
+}
+
+function renderMiniPackages(container, packages, selectedKey, dataName, visible, options) {
+  if (!container) return;
+  container.classList.toggle("is-visible", visible);
+  container.innerHTML = packages.map((pack) => {
+    const total = pack.items.reduce((sum, key) => sum + (options[key]?.price || 0), 0);
+    const details = pack.items.length ? pack.items.map((key) => options[key].label).join(", ") : "Без доп. позиций";
+    return `
+      <article class="package-card mini-card ${selectedKey === pack.key ? "is-active" : ""}">
+        <div>
+          <strong>${pack.title}</strong>
+          <span>${details}</span>
+        </div>
+        <b>${formatMoney(total)}</b>
+        <button class="btn ${selectedKey === pack.key ? "primary-btn" : "muted-btn"}" type="button" data-${dataName}="${pack.key}">
+          ${selectedKey === pack.key ? "Выбрано" : "Выбрать"}
+        </button>
+      </article>
+    `;
+  }).join("");
+}
+
+function bindEquipmentChoices() {
+  $$("[data-dj-kit]").forEach((input) => {
+    input.addEventListener("change", () => {
+      state.selectedDjKits = checkedValues("[data-dj-kit]");
+      syncSelectFallbacks();
+      recalculate();
+    });
+  });
+  $$("[data-host-prop]").forEach((input) => {
+    input.addEventListener("change", () => {
+      state.selectedHostProps = checkedValues("[data-host-prop]");
+      syncSelectFallbacks();
+      recalculate();
+    });
+  });
+  $$("[data-kit-package]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const pack = kitPackages.find((item) => item.key === button.dataset.kitPackage);
+      if (!pack) return;
+      state.selectedKitPackage = pack.key;
+      state.selectedDjKits = [...pack.items];
+      renderEquipmentChoices();
+      recalculate();
+    });
+  });
+  $$("[data-props-package]").forEach((button) => {
+    button.addEventListener("click", () => {
+      const pack = propsPackages.find((item) => item.key === button.dataset.propsPackage);
+      if (!pack) return;
+      state.selectedPropsPackage = pack.key;
+      state.selectedHostProps = [...pack.items];
+      renderEquipmentChoices();
+      recalculate();
+    });
+  });
+}
+
+function checkedValues(selector) {
+  return $$(selector).filter((input) => input.checked).map((input) => input.dataset.djKit || input.dataset.hostProp);
+}
+
+function syncSelectFallbacks() {
+  fields.djKit.value = state.selectedDjKits[0] || "none";
+  fields.hostProps.value = state.selectedHostProps[0] || "none";
+}
+
+function previewPackage(pack) {
+  const previous = snapshotPackageFields();
+  setPackageFields(pack, false);
+  const result = calculate(readValues());
+  restorePackageFields(previous);
+  return result;
+}
+
+function applyPackage(key) {
+  const pack = readyPackages.find((item) => item.key === key);
+  if (!pack) return;
+  state.selectedPackage = key;
+  setPackageFields(pack);
+  renderPackages();
+  updateUiState();
+  recalculate();
+}
+
+function setPackageFields(pack, shouldRender = true) {
+  fields.djRole.value = pack.djRole;
+  fields.djEquipmentMode.value = pack.djEquipmentMode;
+  state.selectedDjKits = pack.djKit === "none" ? [] : [pack.djKit];
+  state.selectedKitPackage = kitPackages.find((item) => item.items.includes(pack.djKit))?.key || "";
+  fields.hostRole.value = pack.hostRole;
+  state.selectedHostProps = pack.hostProps === "none" ? [] : [pack.hostProps];
+  state.selectedPropsPackage = propsPackages.find((item) => item.items.includes(pack.hostProps))?.key || "none";
+  syncSelectFallbacks();
+  if (shouldRender) renderEquipmentChoices();
+}
+
+function snapshotPackageFields() {
+  return {
+    djRole: fields.djRole.value,
+    djEquipmentMode: fields.djEquipmentMode.value,
+    djKit: fields.djKit.value,
+    djKits: [...state.selectedDjKits],
+    hostRole: fields.hostRole.value,
+    hostProps: fields.hostProps.value,
+    hostPropsSelected: [...state.selectedHostProps],
+    selectedKitPackage: state.selectedKitPackage,
+    selectedPropsPackage: state.selectedPropsPackage
+  };
+}
+
+function restorePackageFields(previous) {
+  fields.djRole.value = previous.djRole;
+  fields.djEquipmentMode.value = previous.djEquipmentMode;
+  fields.djKit.value = previous.djKit;
+  state.selectedDjKits = [...previous.djKits];
+  fields.hostRole.value = previous.hostRole;
+  fields.hostProps.value = previous.hostProps;
+  state.selectedHostProps = [...previous.hostPropsSelected];
+  state.selectedKitPackage = previous.selectedKitPackage;
+  state.selectedPropsPackage = previous.selectedPropsPackage;
+  syncSelectFallbacks();
+}
+
 function getComposition() {
   const options = serviceDetails[state.serviceType] || [];
   return options.find((item) => item.value === fields.serviceDetail.value) || null;
@@ -280,13 +656,33 @@ function applyComposition() {
   });
 }
 
+function syncDateTimeFlags() {
+  fields.useExactDate.checked = Boolean(fields.eventDate.value);
+  fields.useExactTime.checked = Boolean(fields.startTime.value);
+  updateInputPlaceholders();
+}
+
+function updateInputPlaceholders() {
+  $$("[data-for]").forEach((node) => {
+    const control = document.getElementById(node.dataset.for);
+    const hasValue = Boolean(control && control.value);
+    node.classList.toggle("is-hidden", hasValue);
+    if (control) control.classList.toggle("has-value", hasValue);
+  });
+}
+
 function bindServiceDetailButtons() {
   $$("[data-service-detail]").forEach((button) => {
     button.addEventListener("click", () => {
       fields.serviceDetail.value = button.dataset.serviceDetail;
+      fields.serviceDetail.dispatchEvent(new Event("change", { bubbles: true }));
+      state.buildMode = "";
+      state.selectedPackage = "";
       applyComposition();
+      renderPackages();
       updateUiState();
       recalculate();
+      requestAnimationFrame(recalculate);
     });
   });
 }
@@ -347,18 +743,22 @@ function updateUiState() {
   const basicReady = Boolean(fields.eventType.value && fields.hours.value);
   const composition = getComposition();
   const serviceReady = basicReady && Boolean(composition);
+  const modeReady = serviceReady && Boolean(state.buildMode);
+  const packageReady = state.buildMode === "packages" && Boolean(state.selectedPackage);
+  const showDetails = modeReady && (state.buildMode === "manual" || packageReady);
   const hasDj = serviceReady && fields.djMode.value !== "none";
   const hasHost = serviceReady && fields.hostMode.value !== "none";
 
   $$(".after-basic").forEach((node) => node.classList.toggle("is-visible", basicReady));
   ui.compositionSection.classList.toggle("is-visible", basicReady);
   ui.serviceDetailWrap.classList.toggle("is-hidden", !basicReady || !state.serviceType);
-  ui.djSection.classList.toggle("is-visible", hasDj);
-  ui.hostSection.classList.toggle("is-visible", hasHost);
-  ui.techSection.classList.toggle("is-visible", serviceReady);
+  ui.modeSection.classList.toggle("is-visible", serviceReady);
+  ui.packageGrid.classList.toggle("is-visible", state.buildMode === "packages");
+  ui.djSection.classList.toggle("is-visible", showDetails && hasDj);
+  ui.hostSection.classList.toggle("is-visible", showDetails && hasHost);
+  ui.techSection.classList.toggle("is-visible", showDetails);
 
-  ui.dateWrap.classList.toggle("is-visible", fields.useExactDate.checked);
-  ui.timeWrap.classList.toggle("is-visible", fields.useExactTime.checked);
+  syncDateTimeFlags();
   ui.distanceWrap.classList.toggle("is-visible", fields.outOfTown.checked);
   ui.guestValue.textContent = getGuestValue();
   ui.distanceValue.textContent = `${fields.distanceKm.value} км`;
@@ -368,12 +768,18 @@ function updateUiState() {
   ui.hostRoleWrap.classList.toggle("is-hidden", !hasHost || fields.hostMode.value === "hostDjSame");
   ui.hostPropsWrap.classList.toggle("is-hidden", !hasHost || fields.hostMode.value === "hostDjSame");
 
-  if (!withDjEquipment) fields.djKit.value = "none";
+  if (!withDjEquipment) {
+    fields.djKit.value = "none";
+    state.selectedDjKits = [];
+  }
   if (!hasHost || fields.hostMode.value === "hostDjSame") {
     fields.hostProps.value = "none";
+    state.selectedHostProps = [];
   }
+  syncSelectFallbacks();
 
   enforceMinimumHours();
+  updateInputPlaceholders();
   requestAnimationFrame(() => {
     if (state.syncResultDock) state.syncResultDock();
   });
@@ -402,11 +808,15 @@ function readValues() {
     djRole: fields.djRole.value,
     djEquipmentMode: fields.djEquipmentMode.value,
     djKit: fields.djKit.value,
+    djKits: [...state.selectedDjKits],
+    kitMode: state.kitMode,
     noInternet: fields.noInternet.checked,
     needGenerator: fields.needGenerator.checked,
     hostMode: fields.hostMode.value,
     hostRole: fields.hostRole.value,
     hostProps: fields.hostProps.value,
+    hostPropsSelected: [...state.selectedHostProps],
+    propsMode: state.propsMode,
     noParking: fields.noParking.checked,
     placeType: fields.placeType.value,
     outOfTown: fields.outOfTown.checked,
@@ -473,14 +883,15 @@ function recalculate() {
 function calculate(values) {
   const pricing = state.pricing;
   const rows = [];
-  if (!values.eventType || !values.hours || !values.serviceDetail) {
+  if (!values.eventType || !values.hours) {
     return emptyResult(rows);
   }
 
   const rate = getGuestRate(values.guests);
   const durationMultiplier = pricing.durationMultipliers[String(values.hours)];
   const eventMultiplier = pricing.eventTypes[values.eventType].multiplier;
-  const placeMultiplier = pricing.places[values.placeType].multiplier;
+  const place = pricing.places[values.placeType] || pricing.places.restaurant;
+  const placeMultiplier = place.multiplier;
   const dayTime = getDayTime(values);
   const closeness = getCloseness(values);
   const equipmentMultiplier = pricing.djEquipmentModes[values.djEquipmentMode].multiplier;
@@ -488,6 +899,32 @@ function calculate(values) {
 
   const inflatedDjRate = rate.dj + daysFromBase * pricing.meta.djDailyIncrease;
   const inflatedHostRate = rate.host + daysFromBase * pricing.meta.hostDailyIncrease;
+
+  const hasSelectedService = Boolean(values.serviceDetail) || values.djMode !== "none" || values.hostMode !== "none";
+  if (!hasSelectedService) {
+    const amount = roundDown(inflatedDjRate * values.hours * durationMultiplier * eventMultiplier, pricing.meta.roundDownTo);
+    rows.push(line("Предварительно DJ", amount, [
+      `ставка ${formatMoney(inflatedDjRate)}/час`,
+      `${values.hours} ${plural(values.hours, "час", "часа", "часов")}`
+    ]));
+    return {
+      rows,
+      displayRows: rows,
+      beforeReserve: amount,
+      reserve: 0,
+      withReserve: amount,
+      discountPercent: 0,
+      discount: 0,
+      totalBeforeRound: amount,
+      total: Math.max(minimumDisplayTotal, amount),
+      vat: 0,
+      rate,
+      inflatedDjRate,
+      inflatedHostRate,
+      dayTime,
+      closeness
+    };
+  }
 
   const hasDj = values.djMode !== "none";
   const hasHost = values.hostMode !== "none";
@@ -561,14 +998,34 @@ function calculate(values) {
     ]));
   }
 
-  const djKitPrice = hasDj ? pricing.djKits[values.djKit].price : 0;
-  if (djKitPrice) rows.push(line("Оборудование DJ", djKitPrice, [pricing.djKits[values.djKit].label]));
+  const djEquipmentOptions = values.kitMode === "manual" ? manualDjEquipment : pricing.djKits;
+  const selectedDjKits = hasDj && values.djEquipmentMode === "own"
+    ? values.djKits.filter((key) => djEquipmentOptions[key])
+    : [];
+  const djKitPrice = selectedDjKits.reduce((total, key) => total + djEquipmentOptions[key].price, 0);
+  if (djKitPrice) rows.push(line("Оборудование DJ", djKitPrice, selectedDjKits.map((key) => djEquipmentOptions[key].label)));
 
-  const hostPropsPrice = hasHost && !samePerson ? pricing.hostProps[values.hostProps].price : 0;
-  if (hostPropsPrice) rows.push(line("Реквизит ведущего", hostPropsPrice, [pricing.hostProps[values.hostProps].label]));
+  selectedDjKits.forEach((key) => {
+    (djEquipmentOptions[key].extraRows || []).forEach((extra) => {
+      rows.push(line(extra.title, extra.amount, extra.details || []));
+    });
+  });
+
+  const hostEquipmentOptions = values.propsMode === "manual" ? manualHostEquipment : pricing.hostProps;
+  const selectedHostProps = hasHost && !samePerson
+    ? values.hostPropsSelected.filter((key) => hostEquipmentOptions[key])
+    : [];
+  const hostPropsPrice = selectedHostProps.reduce((total, key) => total + hostEquipmentOptions[key].price, 0);
+  if (hostPropsPrice) rows.push(line("Реквизит и артисты ведущего", hostPropsPrice, selectedHostProps.map((key) => hostEquipmentOptions[key].label)));
+
+  selectedHostProps.forEach((key) => {
+    (hostEquipmentOptions[key].extraRows || []).forEach((extra) => {
+      rows.push(line(extra.title, extra.amount, extra.details || []));
+    });
+  });
 
   if (values.noInternet) rows.push(line("Нет интернета", pricing.fixed.noInternet));
-  if (values.needGenerator) rows.push(line("Генератор", pricing.fixed.generator));
+  if (values.needGenerator) rows.push(line("Нет подходящей розетки или/и нужен генератор", pricing.fixed.generator));
   if (values.noParking) rows.push(line("Нет парковки", pricing.fixed.parking));
 
   const hasLoadInOut = djKitPrice > 0 || hostPropsPrice > 0;
@@ -580,6 +1037,7 @@ function calculate(values) {
 
   const beforeReserve = sum(rows);
   const reserve = beforeReserve * (pricing.meta.reservePercent / 100);
+  const baseRows = rows.slice();
 
   const withReserve = beforeReserve + reserve;
   const discountPercent = getDiscountPercent(values.discounts);
@@ -600,6 +1058,7 @@ function calculate(values) {
 
   return {
     rows: rows.filter((row) => Math.round(row.amount) !== 0),
+    displayRows: buildDisplayRows(baseRows, reserve, discountPercent, discount, legalExtra, total),
     beforeReserve,
     reserve,
     withReserve,
@@ -619,6 +1078,7 @@ function calculate(values) {
 function emptyResult(rows = []) {
   return {
     rows,
+    displayRows: rows,
     beforeReserve: 0,
     reserve: 0,
     withReserve: 0,
@@ -644,7 +1104,8 @@ function renderResult(values, result) {
     ? `включая НДС 22%: <strong>${formatMoney(result.vat)}</strong>`
     : "Оплата наличными или переводом по СБП после мероприятия";
 
-  ui.breakdown.innerHTML = result.rows.map((row) => `
+  const visibleRows = result.displayRows || result.rows;
+  ui.breakdown.innerHTML = visibleRows.map((row) => `
     <div class="line-item">
       <div>
         <strong>${row.title}</strong>
@@ -678,6 +1139,26 @@ function animateTotal(nextTotal) {
   state.priceAnimation = requestAnimationFrame(tick);
 }
 
+function buildDisplayRows(baseRows, reserve, discountPercent, discount, legalExtra, total) {
+  const baseTotal = sum(baseRows);
+  const reserveFactor = baseTotal ? 1 + reserve / baseTotal : 1;
+  const positiveRows = baseRows
+    .filter((row) => Math.round(row.amount) !== 0)
+    .map((row) => line(row.title, row.amount * reserveFactor, [...row.details, "подготовка включена"]));
+
+  const rows = [...positiveRows];
+  if (discount) rows.push(line("Скидка", -discount, [`−${discountPercent}%`]));
+  if (legalExtra) rows.push(line("Юрлицо с полным НДС 22%", legalExtra, ["множитель ×1.4"]));
+
+  const delta = Math.round(total - sum(rows));
+  if (delta && rows.length) {
+    const index = rows.findIndex((row) => row.amount > 0);
+    if (index >= 0) rows[index] = { ...rows[index], amount: rows[index].amount + delta };
+  }
+
+  return rows.filter((row) => Math.round(row.amount) !== 0);
+}
+
 function buildBookingText(values, result) {
   const eventLabel = state.pricing.eventTypes[values.eventType]?.label || "не выбран";
   const placeLabel = state.pricing.places[values.placeType]?.label || "не выбрано";
@@ -701,8 +1182,9 @@ function buildBookingText(values, result) {
   if (values.cashless) lines.push("Оплата: юр. лицо с полным НДС 22%");
 
   lines.push("", "Смета:");
-  if (result.rows.length) {
-    result.rows.forEach((row) => {
+  const visibleRows = result.displayRows || result.rows;
+  if (visibleRows.length) {
+    visibleRows.forEach((row) => {
       const details = row.details.length ? ` (${row.details.join("; ")})` : "";
       lines.push(`- ${row.title}: ${formatMoney(row.amount)}${details}`);
     });

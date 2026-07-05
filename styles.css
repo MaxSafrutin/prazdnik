@@ -253,7 +253,8 @@ select {
   border-radius: 11px;
   color: rgba(255, 215, 0, 0.92);
   background: rgba(255, 215, 0, 0.06);
-  font-size: 17px;
+  font-size: 18px;
+  line-height: 1;
   pointer-events: none;
 }
 
@@ -276,6 +277,7 @@ select {
   background: rgba(255, 215, 0, 0.07);
   box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.03);
   font-weight: 950;
+  line-height: 1;
   transition: border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
 }
 
@@ -329,6 +331,50 @@ select {
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   opacity: 0;
+}
+
+.labeled-control input {
+  color: var(--text);
+}
+
+.labeled-control input:not(.has-value) {
+  color: transparent;
+}
+
+.labeled-control input:not(.has-value)::-webkit-datetime-edit,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-fields-wrapper,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-text,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-month-field,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-day-field,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-year-field,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-hour-field,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-minute-field,
+.labeled-control input:not(.has-value)::-webkit-datetime-edit-ampm-field {
+  color: transparent;
+}
+
+.labeled-control input.has-value::-webkit-datetime-edit,
+.labeled-control input.has-value::-webkit-datetime-edit-fields-wrapper,
+.labeled-control input.has-value::-webkit-datetime-edit-text,
+.labeled-control input.has-value::-webkit-datetime-edit-month-field,
+.labeled-control input.has-value::-webkit-datetime-edit-day-field,
+.labeled-control input.has-value::-webkit-datetime-edit-year-field,
+.labeled-control input.has-value::-webkit-datetime-edit-hour-field,
+.labeled-control input.has-value::-webkit-datetime-edit-minute-field,
+.labeled-control input.has-value::-webkit-datetime-edit-ampm-field {
+  color: var(--text);
+}
+
+.input-placeholder {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  right: 52px;
+  z-index: 2;
+  transform: translateY(-50%);
+  color: var(--text);
+  font-weight: 780;
+  pointer-events: none;
 }
 
 .check-label input:checked,
@@ -399,6 +445,139 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .composition-detail {
   margin-top: 14px;
+}
+
+#modeSection .label {
+  margin-bottom: 14px;
+}
+
+#modeSection {
+  padding-top: 4px;
+}
+
+.mini-mode {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 2px;
+}
+
+.package-grid {
+  display: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.package-grid.is-visible {
+  display: grid;
+}
+
+.package-card {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  min-height: 178px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(17, 17, 20, 0.82);
+}
+
+.package-card.is-active {
+  border-color: rgba(255, 215, 0, 0.78);
+  box-shadow: 0 0 0 4px var(--focus);
+}
+
+.package-card strong,
+.package-card b {
+  display: block;
+}
+
+.package-card span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.package-card b {
+  color: var(--gold);
+  font-size: 24px;
+}
+
+.mini-package-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+#djKitWrap {
+  grid-column: 1 / -1;
+}
+
+.mini-card {
+  min-height: 185px;
+  grid-template-rows: 1fr auto auto;
+}
+
+.mini-card .btn {
+  align-self: end;
+}
+
+.option-grid {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.option-grid.is-visible {
+  display: grid;
+}
+
+.option-choice {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(17, 17, 20, 0.82);
+}
+
+.option-choice input {
+  appearance: none;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-content: center;
+  margin: 0;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  background: #0f0f12;
+}
+
+.option-choice input::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  transform: scale(0);
+  border-radius: 3px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-2));
+  transition: transform 0.12s ease;
+}
+
+.option-choice input:checked {
+  border-color: rgba(255, 215, 0, 0.8);
+}
+
+.option-choice input:checked::before {
+  transform: scale(1);
+}
+
+.option-choice b {
+  color: var(--gold);
+  white-space: nowrap;
 }
 
 .range {
@@ -770,6 +949,16 @@ input[type="time"]::-webkit-calendar-picker-indicator {
   }
 
   .composition-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .package-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mini-mode,
+  .option-grid,
+  .mini-package-grid {
     grid-template-columns: 1fr;
   }
 

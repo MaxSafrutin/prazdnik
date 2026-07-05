@@ -225,11 +225,11 @@
   },
   "djEquipmentModes": {
     "own": {
-      "label": "С моим оборудованием",
+      "label": "С оборудованием",
       "multiplier": 1
     },
     "withoutMine": {
-      "label": "Без моего оборудования",
+      "label": "Без оборудования (есть на месте)",
       "multiplier": 1.09
     }
   },

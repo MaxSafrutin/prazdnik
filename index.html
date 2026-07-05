@@ -4,8 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Калькулятор услуг — MAX SAFRUTIN</title>
-  <meta name="description" content="Калькулятор DJ, ведущего, оборудования, реквизита, проезда, скидок и НДС.">
-  <link rel="stylesheet" href="./styles.css">
+  <meta name="description" content="Соберите праздник с DJ, ведущим, оборудованием и артистами. Калькулятор покажет предварительную стоимость и смету.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Калькулятор праздника — MAX SAFRUTIN">
+  <meta property="og:description" content="DJ • Ведущий • Оборудование • Артисты. Создайте себе праздник и получите предварительную стоимость.">
+  <meta property="og:image" content="./assets/icons/MC-logo.ico">
+  <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Калькулятор праздника — MAX SAFRUTIN">
+  <meta name="twitter:description" content="Соберите мероприятие и получите предварительную стоимость.">
+  <meta name="twitter:image" content="./assets/icons/MC-logo.ico">
+  <link rel="icon" href="./assets/icons/MC-logo.ico" sizes="any">
+  <link rel="apple-touch-icon" href="./assets/icons/MC-logo.ico">
+  <link rel="stylesheet" href="./styles.css?v=20260705-11">
 </head>
 <body>
   <main class="app">
@@ -30,16 +41,16 @@
 
           <div class="grid">
             <div class="field">
-              <div class="control select-control" data-symbol="◆">
+              <div class="control select-control" data-symbol="🎉">
                 <select id="eventType" aria-label="Выберите тип мероприятия"></select>
-                <button class="pick-btn" type="button" data-open-control="eventType" aria-label="Открыть список типов мероприятия">◆</button>
+                <button class="pick-btn" type="button" data-open-control="eventType" aria-label="Открыть список типов мероприятия">🎉</button>
               </div>
             </div>
 
             <div class="field">
-              <div class="control select-control" data-symbol="◷">
+              <div class="control select-control" data-symbol="⏳">
                 <select id="hours" aria-label="Выберите кол-во часов"></select>
-                <button class="pick-btn" type="button" data-open-control="hours" aria-label="Открыть список часов">◷</button>
+                <button class="pick-btn" type="button" data-open-control="hours" aria-label="Открыть список часов">⏳</button>
               </div>
               <span class="hint" id="hoursHint">Для пятницы и субботы после 16:00 минимальный заказ — 3 часа.</span>
             </div>
@@ -56,37 +67,9 @@
               </div>
             </div>
 
-            <div class="field after-basic">
-              <label class="check-label">
-                <input id="useExactDate" type="checkbox">
-                <span>Указать точную дату</span>
-              </label>
-              <div class="conditional" id="dateWrap">
-                <label for="eventDate" class="sub-label">Дата мероприятия</label>
-                <div class="control date-control">
-                  <input id="eventDate" type="date">
-                  <button class="pick-btn" id="datePickerButton" type="button" aria-label="Открыть календарь">📅</button>
-                </div>
-              </div>
-              <span class="hint">Выберите вашу или примерную дату.</span>
-            </div>
-
-            <div class="field after-basic">
-              <label class="check-label">
-                <input id="useExactTime" type="checkbox">
-                <span>Указать точное время начала</span>
-              </label>
-              <div class="conditional" id="timeWrap">
-                <label for="startTime" class="sub-label">Время начала</label>
-                <div class="control time-control">
-                  <input id="startTime" type="time" step="1800" value="16:00" list="timeOptions">
-                  <datalist id="timeOptions"></datalist>
-                  <button class="pick-btn" id="timePickerButton" type="button" aria-label="Открыть выбор времени">🕓</button>
-                </div>
-              </div>
-            </div>
-
           </div>
+          <input class="legacy-hidden" id="useExactDate" type="checkbox">
+          <input class="legacy-hidden" id="useExactTime" type="checkbox">
         </section>
 
         <section class="section-block gated-block" id="compositionSection">
@@ -106,6 +89,15 @@
           </div>
         </section>
 
+        <section class="section-block gated-block" id="modeSection">
+          <div class="label">Как собрать праздник?</div>
+          <div class="composition-buttons" aria-label="Режим сборки">
+            <button class="choice-pill" type="button" data-build-mode="manual">Собрать под себя</button>
+            <button class="choice-pill" type="button" data-build-mode="packages">Готовые пакеты</button>
+          </div>
+          <div class="package-grid" id="packageGrid"></div>
+        </section>
+
         <section class="section-block service-block" id="djSection">
           <div class="section-title">
             <span class="badge">3</span>
@@ -121,35 +113,27 @@
             </div>
             <div class="field">
               <label for="djRole">Роль DJ</label>
-              <div class="control select-control" data-symbol="≋">
+              <div class="control select-control" data-symbol="🎧">
                 <select id="djRole"></select>
-                <button class="pick-btn" type="button" data-open-control="djRole" aria-label="Открыть роли DJ">≋</button>
+                <button class="pick-btn" type="button" data-open-control="djRole" aria-label="Открыть роли DJ">🎧</button>
               </div>
             </div>
             <div class="field">
               <label for="djEquipmentMode">Оборудование DJ</label>
-              <div class="control select-control" data-symbol="▰">
+              <div class="control select-control" data-symbol="⚙️">
                 <select id="djEquipmentMode"></select>
-                <button class="pick-btn" type="button" data-open-control="djEquipmentMode" aria-label="Открыть оборудование DJ">▰</button>
+                <button class="pick-btn" type="button" data-open-control="djEquipmentMode" aria-label="Открыть оборудование DJ">⚙️</button>
               </div>
-              <span class="hint">Если без моего оборудования, ставка DJ умножается на коэффициент.</span>
             </div>
             <div class="field" id="djKitWrap">
               <label for="djKit">Комплект оборудования</label>
-              <div class="control select-control" data-symbol="▦">
-                <select id="djKit"></select>
-                <button class="pick-btn" type="button" data-open-control="djKit" aria-label="Открыть комплект оборудования">▦</button>
+              <select class="legacy-hidden" id="djKit"></select>
+              <div class="composition-buttons mini-mode" aria-label="Выбор оборудования DJ">
+                <button class="choice-pill" type="button" data-kit-mode="manual">Набрать вручную</button>
+                <button class="choice-pill" type="button" data-kit-mode="packages">Пакеты</button>
               </div>
-            </div>
-            <div class="field full">
-              <label class="check-label">
-                <input id="noInternet" type="checkbox">
-                <span>Нет интернета</span>
-              </label>
-              <label class="check-label">
-                <input id="needGenerator" type="checkbox">
-                <span>Нет подходящей розетки, нужен генератор</span>
-              </label>
+              <div class="option-grid" id="djKitChoices"></div>
+              <div class="package-grid mini-package-grid" id="djKitPackages"></div>
             </div>
           </div>
         </section>
@@ -169,23 +153,20 @@
             </div>
             <div class="field" id="hostRoleWrap">
               <label for="hostRole">Роль ведущего</label>
-              <div class="control select-control" data-symbol="◌">
+              <div class="control select-control" data-symbol="🎤">
                 <select id="hostRole"></select>
-                <button class="pick-btn" type="button" data-open-control="hostRole" aria-label="Открыть роли ведущего">◌</button>
+                <button class="pick-btn" type="button" data-open-control="hostRole" aria-label="Открыть роли ведущего">🎤</button>
               </div>
             </div>
             <div class="field full" id="hostPropsWrap">
               <label for="hostProps">Оборудование и реквизит ведущего</label>
-              <div class="control select-control" data-symbol="◇">
-                <select id="hostProps"></select>
-                <button class="pick-btn" type="button" data-open-control="hostProps" aria-label="Открыть реквизит">◇</button>
+              <select class="legacy-hidden" id="hostProps"></select>
+              <div class="composition-buttons mini-mode" aria-label="Выбор реквизита ведущего">
+                <button class="choice-pill" type="button" data-props-mode="manual">Набрать вручную</button>
+                <button class="choice-pill" type="button" data-props-mode="packages">Пакеты</button>
               </div>
-            </div>
-            <div class="field full">
-              <label class="check-label">
-                <input id="noParking" type="checkbox">
-                <span>Нет парковки</span>
-              </label>
+              <div class="option-grid" id="hostPropsChoices"></div>
+              <div class="package-grid mini-package-grid" id="hostPropsPackages"></div>
             </div>
           </div>
         </section>
@@ -197,10 +178,24 @@
           </div>
           <div class="grid">
             <div class="field">
-              <label for="placeType">Место проведения</label>
-              <div class="control select-control" data-symbol="⌖">
-                <select id="placeType"></select>
-                <button class="pick-btn" type="button" data-open-control="placeType" aria-label="Открыть место проведения">⌖</button>
+              <div class="control select-control" data-symbol="📍">
+                <select id="placeType" aria-label="Место проведения"></select>
+                <button class="pick-btn" type="button" data-open-control="placeType" aria-label="Открыть место проведения">📍</button>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control date-control labeled-control">
+                <input id="eventDate" type="date" aria-label="Выберите дату">
+                <span class="input-placeholder" data-for="eventDate">Выберите дату</span>
+                <button class="pick-btn" id="datePickerButton" type="button" aria-label="Открыть календарь">📅</button>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control time-control labeled-control">
+                <input id="startTime" type="time" step="1800" list="timeOptions" aria-label="Выберите время начала">
+                <span class="input-placeholder" data-for="startTime">Выберите время начала</span>
+                <datalist id="timeOptions"></datalist>
+                <button class="pick-btn" id="timePickerButton" type="button" aria-label="Открыть выбор времени">🕒</button>
               </div>
             </div>
             <div class="field">
@@ -217,6 +212,18 @@
               </div>
             </div>
             <div class="field full">
+              <label class="check-label">
+                <input id="noInternet" type="checkbox">
+                <span>Нет интернета</span>
+              </label>
+              <label class="check-label">
+                <input id="needGenerator" type="checkbox">
+                <span>Нет подходящей розетки или/и нужен генератор</span>
+              </label>
+              <label class="check-label">
+                <input id="noParking" type="checkbox">
+                <span>Нет парковки</span>
+              </label>
               <label class="check-label">
                 <input id="cashless" type="checkbox">
                 <span>Расчёт для юр. лица с полным НДС 22%</span>
@@ -284,8 +291,8 @@
     </section>
   </div>
 
-  <script src="./data/pricing.js"></script>
-  <script src="./data/content.js"></script>
-  <script src="./app.js"></script>
+  <script src="./data/pricing.js?v=20260705-11"></script>
+  <script src="./data/content.js?v=20260705-11"></script>
+  <script src="./app.js?v=20260705-11"></script>
 </body>
 </html>
